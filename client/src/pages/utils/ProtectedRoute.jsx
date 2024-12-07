@@ -2,6 +2,7 @@ import { useSelector } from "react-redux";
 import Unauthorised from "./Unauthorised";
 import NotLoggedIn from "./NotLoggedIn";
 import NotActivate from "./NotActivate";
+import Suspended from "./Suspended";
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const userData = useSelector((state) => state.user.userData);
@@ -14,8 +15,15 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   if (userData.status === "inactive") {
     return <NotActivate user={userData} darkMode={darkMode} />;
   }
+  // if (userData.status === "suspended") {
+  //   return <Suspended darkMode={darkMode} />;
+  // }
 
-  if (allowedRoles && allowedRoles?.length > 0  && !allowedRoles.includes(userData.role)) {
+  if (
+    allowedRoles &&
+    allowedRoles.length > 0 &&
+    !allowedRoles?.includes(userData.role)
+  ) {
     return <Unauthorised darkMode={darkMode} />;
   }
 

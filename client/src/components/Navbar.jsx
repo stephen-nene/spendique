@@ -45,7 +45,7 @@ const MenuItems = ({ onClick, userData, isDashRoute }) => {
       
       {userData?.role === "admin" && (
         <Link 
-          to={isDashRoute ? "/" : "/dash"} 
+          to={isDashRoute ? "/" : "/dashboard"} 
           className="btn btn-login"
         >
           {isDashRoute ? "Public" : "Dashboard"}
@@ -65,7 +65,7 @@ export const Navbar = () => {
   const userData = useSelector((state) => state.user.userData);
 
   // Compute route type once
-  const isDashRoute = location.pathname.startsWith("/dash");
+  const isDashRoute = location.pathname.startsWith("/dashboard");
 
   // Memoized toggle functions to prevent unnecessary re-renders
   const toggleMenu = React.useCallback(() => {

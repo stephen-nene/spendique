@@ -20,6 +20,8 @@ const DashboardRoutes = {
   Meetings: lazy(() => import("./pages/dashboard/Meetings")),
   Scholarships: lazy(() => import("./pages/dashboard/Scholarships")),
   Users: lazy(() => import("./pages/dashboard/Users")),
+  AllFinances: lazy(() => import("./pages/dashboard/AllFinances")),
+  Categories: lazy(() => import("./pages/dashboard/Categories"))
 };
 
 const AuthRoutes = {
@@ -34,13 +36,13 @@ import "./assets/styles/App.css";
 
 // Fallback Loading Component
 const LoadingFallback = () => (
-  <div class="w-full max-w-md mx-auto animate-pulse p-9">
-    <h1 class="h-2 bg-gray-300 rounded-lg w-52 dark:bg-gray-600"></h1>
+  <div className="w-full max-w-md mx-auto animate-pulse p-9">
+    <h1 className="h-2 bg-gray-300 rounded-lg w-52 dark:bg-gray-600"></h1>
 
-    <p class="w-48 h-2 mt-6 bg-gray-200 rounded-lg dark:bg-gray-700"></p>
-    <p class="w-full h-2 mt-4 bg-gray-200 rounded-lg dark:bg-gray-700"></p>
-    <p class="w-64 h-2 mt-4 bg-gray-200 rounded-lg dark:bg-gray-700"></p>
-    <p class="w-4/5 h-2 mt-4 bg-gray-200 rounded-lg dark:bg-gray-700"></p>
+    <p className="w-48 h-2 mt-6 bg-gray-200 rounded-lg dark:bg-gray-700"></p>
+    <p className="w-full h-2 mt-4 bg-gray-200 rounded-lg dark:bg-gray-700"></p>
+    <p className="w-64 h-2 mt-4 bg-gray-200 rounded-lg dark:bg-gray-700"></p>
+    <p className="w-4/5 h-2 mt-4 bg-gray-200 rounded-lg dark:bg-gray-700"></p>
   </div>
 );
 
@@ -103,17 +105,17 @@ function App() {
                   element={renderProtectedRoute([], DashboardRoutes.Home)}
                 />
                 <Route
-                  path="meetings"
+                  path="categories"
                   element={renderProtectedRoute(
                     ["admin"],
-                    DashboardRoutes.Meetings
+                    DashboardRoutes.Categories
                   )}
                 />
                 <Route
-                  path="scholarships"
+                  path="finances"
                   element={renderProtectedRoute(
                     ["admin"],
-                    DashboardRoutes.Scholarships
+                    DashboardRoutes.AllFinances
                   )}
                 />
                 <Route

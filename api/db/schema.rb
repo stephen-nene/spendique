@@ -10,51 +10,37 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_03_083144) do
-  create_table "meeting_participants", force: :cascade do |t|
-    t.integer "meeting_id", null: false
-    t.integer "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["meeting_id"], name: "index_meeting_participants_on_meeting_id"
-    t.index ["user_id"], name: "index_meeting_participants_on_user_id"
-  end
-
-  create_table "meetings", force: :cascade do |t|
-    t.integer "admin_id"
-    t.integer "scholarship_id", null: false
-    t.string "title", null: false
-    t.string "description"
-    t.integer "status", default: 0, null: false
-    t.datetime "date"
-    t.integer "meet_type", default: 1, null: false
-    t.text "meeting_link"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["admin_id"], name: "index_meetings_on_admin_id"
-    t.index ["meet_type"], name: "index_meetings_on_meet_type"
-    t.index ["scholarship_id"], name: "index_meetings_on_scholarship_id"
-    t.index ["status"], name: "index_meetings_on_status"
-  end
-
-  create_table "scholarships", force: :cascade do |t|
-    t.string "title"
-    t.json "description"
-    t.json "eligibility_criteria"
-    t.float "funding_amount"
-    t.datetime "deadline"
+ActiveRecord::Schema[8.0].define(version: 2024_12_07_152920) do
+  create_table "categories", force: :cascade do |t|
+    t.string "name"
     t.integer "status"
-    t.string "contact_email"
-    t.string "application_link"
-    t.string "country"
-    t.integer "level"
-    t.integer "major"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["country"], name: "index_scholarships_on_country"
-    t.index ["level"], name: "index_scholarships_on_level"
-    t.index ["major"], name: "index_scholarships_on_major"
-    t.index ["status"], name: "index_scholarships_on_status"
+    t.index ["name"], name: "index_categories_on_name", unique: true
+    t.index ["status"], name: "index_categories_on_status"
+  end
+
+  create_table "categories_finances", id: false, force: :cascade do |t|
+    t.integer "finance_id", null: false
+    t.integer "category_id", null: false
+    t.index ["category_id", "finance_id"], name: "index_categories_finances_on_category_id_and_finance_id"
+    t.index ["finance_id", "category_id"], name: "index_categories_finances_on_finance_id_and_category_id"
+  end
+
+  create_table "finances", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.text "title"
+    t.float "transaction_cost"
+    t.text "description"
+    t.integer "transaction_type"
+    t.float "amount"
+    t.json "recurring"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["amount"], name: "index_finances_on_amount"
+    t.index ["created_at"], name: "index_finances_on_created_at"
+    t.index ["transaction_type"], name: "index_finances_on_transaction_type"
+    t.index ["user_id"], name: "index_finances_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -69,17 +55,17 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_03_083144) do
     t.integer "role", default: 0
     t.string "profile_pic", default: "https://placehold.co/600x400"
     t.integer "status", default: 0
+    t.float "salary"
     t.string "token"
     t.datetime "token_expiry"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["email", "username", "token"], name: "index_users_on_email_and_username_and_token", unique: true
+    t.index ["phonenumber"], name: "index_users_on_phonenumber", unique: true
     t.index ["role"], name: "index_users_on_role"
     t.index ["status"], name: "index_users_on_status"
+    t.index ["username"], name: "index_users_on_username", unique: true
   end
 
-  add_foreign_key "meeting_participants", "meetings"
-  add_foreign_key "meeting_participants", "users"
-  add_foreign_key "meetings", "scholarships"
-  add_foreign_key "meetings", "users", column: "admin_id"
+  add_foreign_key "finances", "users"
 end

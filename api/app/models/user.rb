@@ -1,16 +1,10 @@
 class User < ApplicationRecord
-  enum :role, { user: 0, provider: 1, admin: 2 }
+  enum :role, { user: 0, admin: 2 }
   enum :status, { pending: 0, active: 1, suspended: 2 }
 
   has_secure_password
-
-  # Associations
-  # Admin can initiate many meetings
-  has_many :meetings, foreign_key: :admin_id
-
-  # User can participate in many meetings (for group meetings)
-  has_many :meeting_participants
-  has_many :meetings, through: :meeting_participants
+  
+  has_many :finances
 
   before_save { self.email = email.downcase }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i

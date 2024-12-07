@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :categories
+  resources :finances
   namespace :auth do
     post "login", to: "sessions#login"
     post "register", to: "sessions#register"

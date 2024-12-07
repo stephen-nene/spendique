@@ -12,6 +12,7 @@ class CreateUsers < ActiveRecord::Migration[8.0]
       t.integer :role, default: 0
       t.string :profile_pic, default: 'https://placehold.co/600x400'
       t.integer :status, default: 0
+      t.float :salary
       t.string :token
       t.datetime :token_expiry
 
@@ -21,5 +22,7 @@ class CreateUsers < ActiveRecord::Migration[8.0]
     add_index :users, :role      
     add_index :users, :status         
     add_index :users, [:email, :username,:token], unique: true  
+    add_index :users, :phonenumber, unique: true
+    add_index :users, :username, unique: true
   end
 end

@@ -141,6 +141,7 @@ export default function Meetings({ darkMode }) {
         </tbody>
       </table>
 
+{/* agination area */}
       <div
         className={`md:flex m-4 ${
           darkMode ? " text-gray-200" : " text-gray-900"

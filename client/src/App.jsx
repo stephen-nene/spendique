@@ -21,7 +21,7 @@ const DashboardRoutes = {
   Scholarships: lazy(() => import("./pages/dashboard/Scholarships")),
   Users: lazy(() => import("./pages/dashboard/Users")),
   AllFinances: lazy(() => import("./pages/dashboard/AllFinances")),
-  Categories: lazy(() => import("./pages/dashboard/Categories"))
+  Categories: lazy(() => import("./pages/dashboard/Categories")),
 };
 
 const AuthRoutes = {
@@ -33,6 +33,7 @@ const AuthRoutes = {
 };
 
 import "./assets/styles/App.css";
+import Meetings from "./pages/dashboard/Meetings";
 
 // Fallback Loading Component
 const LoadingFallback = () => (
@@ -111,6 +112,12 @@ function App() {
                     DashboardRoutes.Categories
                   )}
                 />
+                <Route
+                  path="meetings"
+                  element={renderProtectedRoute(
+                    ["admin", "user"],
+                    DashboardRoutes.Meetings
+                  )}/>
                 <Route
                   path="finances"
                   element={renderProtectedRoute(

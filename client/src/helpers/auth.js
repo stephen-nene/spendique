@@ -29,7 +29,7 @@ export const getCurrentUser = async (dispatch, navigate) => {
     const response = await apiClient.get("auth/me"); 
 
     if (response.status === 200) {
-      showMessage("success", `welcome ${response.data.username}`, 2);
+      showMessage("success", `welcome ${response.data.username}`, 1);
       dispatch(loginAction(response.data));
       // console.log(response)
       return response.data;

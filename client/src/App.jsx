@@ -9,7 +9,7 @@ import Footer from "./components/Footer";
 import { Home } from "./components/pages/Home";
 import { Profiles } from "./components/pages/Profiles";
 import Finances from "./components/pages/Finances";
-import About from "./components/pages/About";
+import Contact from "./components/pages/Contact";
 import ProtectedRoute from "./components/pages/utils/ProtectedRoute";
 import Error404 from "./components/pages/utils/Error404";
 
@@ -84,7 +84,7 @@ function App() {
               />
               <Route path="/reset/:token" element={<AuthRoutes.Reset />} />
 
-              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
               {/* Protected Routes */}
               <Route
                 path="/profile"

@@ -18,7 +18,7 @@ const MenuItems = ({ onClick, userData, isDashRoute }) => {
   const publicLinks = [
     { to: "/", label: "Home" },
     { to: "/finances", label: "Finances" },
-    { to: "/about", label: "About" }
+    { to: "/contact", label: "Contact" }
   ];
 
   const links = isDashRoute ? dashboardLinks : publicLinks;

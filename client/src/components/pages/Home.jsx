@@ -5,6 +5,7 @@ import Services from './wrappers/Services'
 import Stats from './wrappers/Stats'
 import Testimonials from './wrappers/Testimonials'
 import Teams from './wrappers/Teams'
+import Pricings from './wrappers/Pricings'
 export const Home = () => {
   return (
     <>
@@ -14,6 +15,7 @@ export const Home = () => {
       <Stats />
       <Testimonials />
       <Teams />
+      <Pricings />
 
 
     </div>

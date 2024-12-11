@@ -143,7 +143,7 @@ months_to_seed.each do |month|
   puts "\n✨ Seeding finances for #{Date::MONTHNAMES[month]}..."
   
   # For each month, generate finances for all users
-  (regular_users).each do |user|
+  (admin_users+regular_users).each do |user|
     generate_finances_for_user_in_month(user, categories, month, year)
   end
 

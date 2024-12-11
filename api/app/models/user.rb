@@ -1,7 +1,9 @@
 class User < ApplicationRecord
   enum :role, { user: 0, admin: 2 }
   enum :status, { pending: 0, active: 1, suspended: 2 }
-
+  def admin?
+    role == 'admin' # Adjust based on your database schema
+  end
   has_secure_password
   
   has_many :finances

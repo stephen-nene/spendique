@@ -1,4 +1,5 @@
 import React from "react";
+import heroimg from '../../../assets/images/money.webp'
 
 export default function Heros() {
   return (
@@ -30,7 +31,8 @@ export default function Heros() {
         </div>
         <div className="md:h-[450px]">
           <img
-            src="https://files.oaiusercontent.com/file-7GdbZLjYKf5EA98725R8zM?se=2024-12-11T08%3A20%3A17Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D604800%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3D1a7ee7a2-7132-43ef-be7b-778ea090aba7.webp&sig=p/WY/Y2jtuaIMGKJVg0rdcXX%2BSItUP1E6ewJCE3iLmo%3D"
+          src={heroimg}
+            // src="https://files.oaiusercontent.com/file-7GdbZLjYKf5EA98725R8zM?se=2024-12-11T08%3A20%3A17Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D604800%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3D1a7ee7a2-7132-43ef-be7b-778ea090aba7.webp&sig=p/WY/Y2jtuaIMGKJVg0rdcXX%2BSItUP1E6ewJCE3iLmo%3D"
             className="w-full h-full object-contain rounded-lg"
             alt="Dining Experience"
           />

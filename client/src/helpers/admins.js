@@ -80,12 +80,14 @@ export async function fetchScholarships(page, dispatch) {
   }
 }
 
-export async function fetchFinances(page = 1, dispatch) {
+export async function fetchFinances(page = 1, dispatch, viewMyRecords = false) {
   const loadingMessage = showMessage("loading", "fetching finances", 0);
   try {
-    const response = await apiClient.get(`/finances?page=${page}`);
+    const response = await apiClient.get(
+      `/finances?page=${page}&only_my_records=${viewMyRecords}`
+    );
     if (response.status === 200) {
-      dispatch(setFinancesPageData(page, response.data));
+      dispatch(setFinancesPageData(page, response.data, viewMyRecords));
       return response.data;
     } else {
       console.error("Failed to fetch finances:", response.data);

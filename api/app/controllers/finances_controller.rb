@@ -3,10 +3,33 @@ class FinancesController < ApplicationController
 
   # GET /finances
   def index
-    @finances = Finance.all.page(params[:page])
-
-    render json: { finances: @finances.map { |finance| FinanceSerializer.new(finance) }, meta: pagination_meta(@finances) }
+    if session[:user_id]
+      user = User.find_by(id: session[:user_id])
+  
+      if user.nil?
+        render json: { error: "Unauthorized: User not found" }, status: :unauthorized and return
+      end
+  
+      if params[:only_my_records] == 'true'
+        # Fetch records only associated with the logged-in user
+        @finances = user.finances.page(params[:page])
+      elsif user.admin?
+        # Fetch all records for admins
+        @finances = Finance.all.page(params[:page])
+      else
+        # Fetch records only associated with the user
+        @finances = user.finances.page(params[:page])
+      end
+  
+      render json: { 
+        finances: @finances.map { |finance| FinanceSerializer.new(finance) }, 
+        meta: pagination_meta(@finances) 
+      }
+    else
+      render json: { error: "Unauthorized: No session cookie" }, status: :unauthorized
+    end
   end
+  
 
   # GET /finances/1
   def show

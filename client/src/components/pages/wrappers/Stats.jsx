@@ -1,29 +1,34 @@
-import React from 'react'
+import React from 'react';
 
 export default function Stats() {
   return (
-<div class="bg-gray-100 px-4 py-12 font-sans">
-      <div class="max-w-4xl max-sm:max-w-sm mx-auto">
-        <h2 class="text-gray-800 text-4xl max-sm:text-2xl font-extrabold mb-8">Application Metrics</h2>
-        <div class="grid md:grid-cols-4 sm:grid-cols-2 gap-5">
-          <div class="bg-white rounded-xl border px-7 py-8">
-            <p class="text-gray-400 text-base font-semibold mb-1">Total free services</p>
-            <h3 class="text-blue-600 text-3xl font-extrabold">5.4M+</h3>
+    <div className="bg- gray-100 px-4 py-12 font-sans">
+      <div className="max-w-4xl max-sm:max-w-sm mx-auto">
+        <h2 className="text-gray-800 text-4xl max-sm:text-2xl font-extrabold mb-8">
+          Why Choose Our Spending Habit Tracker?
+        </h2>
+        <p className="text-gray-600 text-lg mb-8">
+          Trusted by thousands, our tracker offers powerful insights to help you manage your spending effectively. See why users love us:
+        </p>
+        <div className="grid md:grid-cols-4 sm:grid-cols-2 gap-5">
+          <div className="bg-white rounded-xl border px-7 py-8">
+            <p className="text-gray-400 text-base font-semibold mb-1">Money Saved by Users</p>
+            <h3 className="text-blue-600 text-3xl font-extrabold">$5.4M+</h3>
           </div>
-          <div class="bg-white rounded-xl border px-7 py-8">
-            <p class="text-gray-400 text-base font-semibold mb-1">Revenue a month</p>
-            <h3 class="text-blue-600 text-3xl font-extrabold">$80K</h3>
+          <div className="bg-white rounded-xl border px-7 py-8">
+            <p className="text-gray-400 text-base font-semibold mb-1">Active Monthly Users</p>
+            <h3 className="text-blue-600 text-3xl font-extrabold">80K+</h3>
           </div>
-          <div class="bg-white rounded-xl border px-7 py-8">
-            <p class="text-gray-400 text-base font-semibold mb-1">Engagement</p>
-            <h3 class="text-blue-600 text-3xl font-extrabold">100K</h3>
+          <div className="bg-white rounded-xl border px-7 py-8">
+            <p className="text-gray-400 text-base font-semibold mb-1">Daily Transactions Logged</p>
+            <h3 className="text-blue-600 text-3xl font-extrabold">100K+</h3>
           </div>
-          <div class="bg-white rounded-xl border px-7 py-8">
-            <p class="text-gray-400 text-base font-semibold mb-1">Server Uptime</p>
-            <h3 class="text-blue-600 text-3xl font-extrabold">99.9%</h3>
+          <div className="bg-white rounded-xl border px-7 py-8">
+            <p className="text-gray-400 text-base font-semibold mb-1">Reliability</p>
+            <h3 className="text-blue-600 text-3xl font-extrabold">99.9% Uptime</h3>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

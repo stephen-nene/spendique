@@ -1,4 +1,4 @@
-import { message, FloatButton } from "antd";
+import { message, FloatButton, Switch } from "antd";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchFinances } from "../../../helpers/admins"; // Adjust path if needed
@@ -9,19 +9,19 @@ import { PlusOutlined } from "@ant-design/icons";
 export default function AllFinances() {
   const [finances, setFinances] = useState([]);
   const [meta, setMeta] = useState({});
+  const [viewMyRecords, setViewMyRecords] = useState(false); // Toggle for fetching user-specific records
   const dispatch = useDispatch();
   const paginatedFinances = useSelector((state) => state.app.paginatedFinances); // Assume Redux state holds paginated finances
 
   const getFinances = async (page = 1) => {
-    if (paginatedFinances[page]) {
+    if (paginatedFinances[page]?.viewMyRecords === viewMyRecords) {
       setMeta(paginatedFinances[page].meta);
       setFinances(paginatedFinances[page].finances);
       return paginatedFinances[page];
     }
 
     try {
-      const data = await fetchFinances(page, dispatch);
-      // console.log(data);
+      const data = await fetchFinances(page, dispatch, viewMyRecords);
       setMeta(data.meta);
       setFinances(data.finances);
     } catch (error) {
@@ -31,7 +31,7 @@ export default function AllFinances() {
 
   useEffect(() => {
     getFinances();
-  }, []);
+  }, [viewMyRecords]);
 
   const handleEdit = (finance) => {
     message.success(`Editing finance record: ${finance?.title}`, 1);
@@ -83,6 +83,7 @@ export default function AllFinances() {
       ),
     },
   ];
+
   if (finances.some((item) => item.created_at)) {
     financeColumns.push({
       key: "created_at",
@@ -102,6 +103,14 @@ export default function AllFinances() {
 
   return (
     <div className="min-h-screen font-[sans-serif] overflow-x-auto">
+      <div className="flex justify-between items-center mb-4">
+        <Switch
+          checked={viewMyRecords}
+          onChange={(checked) => setViewMyRecords(checked)}
+          checkedChildren="My Records"
+          unCheckedChildren="All Records"
+        />
+      </div>
       <DashTable
         data={finances}
         columns={financeColumns}

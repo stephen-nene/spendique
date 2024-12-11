@@ -90,7 +90,7 @@ export const Navbar = () => {
         <nav className="container">
           <div className="navbar-wrapper">
             <NavLink className="text-2xl font-bold" to="/">
-              Spendique
+              SpendIQue
             </NavLink>
 
             {/* Desktop Menu */}

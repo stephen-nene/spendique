@@ -129,7 +129,7 @@ admin_users = create_users(:admin, 5)
 puts "✨ Seeding normal users... 👤"
 regular_users = create_users(:user, 20)
 
-puts "🎉 Seeding complete! #{User.count} users have been added: #{5} admins and #{20} users."
+puts "🎉 Seeding complete! #{User.count} users have been added: #{admin_users.count} admins and #{20} users."
 
 
 puts "\n✨ Seeding finances for months 9, 10, 11... 💰"

@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiClient from "./apiClient";
 import { message } from "antd";
 import { loginAction, signupAction,logoutAction } from "../store/actions/userAction";
 
@@ -9,21 +9,6 @@ function showMessage(type, content, duration) {
   });
 }
 
-// Create an Axios instance with defaults
-const apiClient = axios.create({
-  baseURL: "http://localhost:3000/",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  withCredentials: true, 
-
-});
-
-// Add a request interceptor to include custom headers dynamically
-apiClient.interceptors.request.use((config) => {
-  config.headers["X-Frontend-Host"] = window.location.origin;
-  return config;
-});
 export async function resetPassword(data) {
   try {
     const response = await apiClient.put("/auth/reset_password", data);

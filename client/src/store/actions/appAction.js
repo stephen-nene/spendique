@@ -13,16 +13,18 @@ export const setUserPageData = (page, data) => {
   };
 };
 
-export const setScholarshipPageData = (page,data) =>{
+
+
+export const setCategoriesPageData = (page,data) => {
   return {
-    type: "SET_SCHOLARSHIP_PAGE_DATA",
-    payload: { page, data  }, 
+    type: "SET_CATEGORIES_PAGE_DATA",
+    payload: { page, data },
   };
 }
 
-export const setMeetingsPageData = (page, data) => {
+export const setFinancesPageData = (page,data) => {
   return {
-    type: "SET_MEETINGS_PAGE_DATA",
+    type: "SET_FINANCES_PAGE_DATA",
     payload: { page, data },
   };
 }

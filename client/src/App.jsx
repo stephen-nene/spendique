@@ -6,34 +6,32 @@ import { useSelector, useDispatch } from "react-redux";
 import { Navbar } from "./components/Navbar";
 import Footer from "./components/Footer";
 
-import { Home } from "./pages/Home";
-import { Profiles } from "./pages/Profiles";
-import Finances from "./pages/Finances";
-import About from "./pages/About";
-import ProtectedRoute from "./pages/utils/ProtectedRoute";
-import Error404 from "./pages/utils/Error404";
+import { Home } from "./components/pages/Home";
+import { Profiles } from "./components/pages/Profiles";
+import Finances from "./components/pages/Finances";
+import About from "./components/pages/About";
+import ProtectedRoute from "./components/pages/utils/ProtectedRoute";
+import Error404 from "./components/pages/utils/Error404";
 
 import { getCurrentUser } from "./helpers/auth";
 
 const DashboardRoutes = {
-  Home: lazy(() => import("./pages/dashboard/HomeDash")),
-  Meetings: lazy(() => import("./pages/dashboard/Meetings")),
-  Scholarships: lazy(() => import("./pages/dashboard/Scholarships")),
-  Users: lazy(() => import("./pages/dashboard/Users")),
-  AllFinances: lazy(() => import("./pages/dashboard/AllFinances")),
-  Categories: lazy(() => import("./pages/dashboard/Categories")),
+  Home: lazy(() => import("./components/pages/dashboard/HomeDash")),
+  Scholarships: lazy(() => import("./components/pages/dashboard/Scholarships")),
+  Users: lazy(() => import("./components/pages/dashboard/Users")),
+  AllFinances: lazy(() => import("./components/pages/dashboard/AllFinances")),
+  Categories: lazy(() => import("./components/pages/dashboard/Categories")),
 };
 
 const AuthRoutes = {
-  Login: lazy(() => import("./pages/auth/Login")),
-  Forgot: lazy(() => import("./pages/auth/Forgot")),
-  Register: lazy(() => import("./pages/auth/Register")),
-  Activate: lazy(() => import("./pages/auth/Activate")),
-  Reset: lazy(() => import("./pages/auth/Reset")),
+  Login: lazy(() => import("./components/pages/auth/Login")),
+  Forgot: lazy(() => import("./components/pages/auth/Forgot")),
+  Register: lazy(() => import("./components/pages/auth/Register")),
+  Activate: lazy(() => import("./components/pages/auth/Activate")),
+  Reset: lazy(() => import("./components/pages/auth/Reset")),
 };
 
 import "./assets/styles/App.css";
-import Meetings from "./pages/dashboard/Meetings";
 
 // Fallback Loading Component
 const LoadingFallback = () => (
@@ -71,22 +69,20 @@ function App() {
       <div className="flex flex-col ">
         <Navbar darkMode={darkMode} />
         <div
-          className={`${
-            darkMode ? "bg-sky-950" : ""
-          } min-h-screen pt-[63px] md:mt-[5px] `}
+          className={`pt-[65px] md:pt-[75px]  ${darkMode ? "bg-sky-950" : ""} min-h-screen `}
         >
           <Suspense fallback={<LoadingFallback />}>
             <Routes>
               {/* Public Routes */}
               <Route path="/" element={<Home darkMode={darkMode} />} />
-              <Route
-                path="/login"
-                element={<AuthRoutes.Login darkMode={darkMode} />}
-              />
+              <Route path="/login" element={<AuthRoutes.Login />} />
               <Route path="/register" element={<AuthRoutes.Register />} />
-              <Route path="/forgot-password" element={<AuthRoutes.Forgot />} />
-              <Route path="/activate" element={<AuthRoutes.Activate />} />
-              <Route path="/reset-password" element={<AuthRoutes.Reset />} />
+              <Route path="/forgot" element={<AuthRoutes.Forgot />} />
+              <Route
+                path="/activate/:token"
+                element={<AuthRoutes.Activate />}
+              />
+              <Route path="/reset/:token" element={<AuthRoutes.Reset />} />
 
               <Route path="/about" element={<About />} />
               {/* Protected Routes */}
@@ -100,7 +96,7 @@ function App() {
               />
 
               {/* Dashboard Routes */}
-              <Route path="/dashboard">
+              <Route path="/dash">
                 <Route
                   index
                   element={renderProtectedRoute([], DashboardRoutes.Home)}
@@ -112,12 +108,7 @@ function App() {
                     DashboardRoutes.Categories
                   )}
                 />
-                <Route
-                  path="meetings"
-                  element={renderProtectedRoute(
-                    ["admin", "user"],
-                    DashboardRoutes.Meetings
-                  )}/>
+
                 <Route
                   path="finances"
                   element={renderProtectedRoute(

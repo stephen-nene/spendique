@@ -2,8 +2,8 @@
 const initialState = {
   darkMode: localStorage.getItem("darkMode") === "true",
   paginatedUsers: {}, // { pageNumber: { users: [], meta: {} } }
-  paginatedScholarships: {},
-  paginatedMeetings: {}, 
+  paginatedFinances: {},
+  paginatedCategories: {},
 };
 
 const appReducer = (state = initialState, action) => {
@@ -23,22 +23,22 @@ const appReducer = (state = initialState, action) => {
           [action.payload.page]: action.payload.data,
         },
       };
-    case "SET_SCHOLARSHIP_PAGE_DATA":
+    case "SET_FINANCES_PAGE_DATA":
       return {
         ...state,
-        paginatedScholarships: {
-          ...state.paginatedScholarships,
+        paginatedFinances: {
+          ...state.paginatedFinances,
           [action.payload.page]: action.payload.data,
         },
       };
-      case "SET_MEETINGS_PAGE_DATA":
-        return {
-          ...state,
-          paginatedMeetings: {
-            ...state.paginatedMeetings,
-            [action.payload.page]: action.payload.data,
-          },
-        };
+    case "SET_CATEGORIES_PAGE_DATA":
+      return {
+        ...state,
+        paginatedCategories: {
+          ...state.paginatedCategories,
+          [action.payload.page]: action.payload.data,
+        },
+      };
 
     default:
       return state;

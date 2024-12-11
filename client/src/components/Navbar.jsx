@@ -9,10 +9,10 @@ import "../assets/styles/navbar.css";
 // Extract menu items to separate component
 const MenuItems = ({ onClick, userData, isDashRoute }) => {
   const dashboardLinks = [
-    { to: "/dashboard", label: "DashHome" },
-    { to: "/dashboard/finances", label: "Finances" },
-    { to: "/dashboard/users", label: "Users" },
-    { to: "/dashboard/categories", label: "Categories" }
+    { to: "/dash", label: "DashHome" },
+    { to: "/dash/finances", label: "Finances" },
+    { to: "/dash/users", label: "Users" },
+    { to: "/dash/categories", label: "Categories" }
   ];
 
   const publicLinks = [
@@ -65,7 +65,7 @@ export const Navbar = () => {
   const userData = useSelector((state) => state.user.userData);
 
   // Compute route type once
-  const isDashRoute = location.pathname.startsWith("/dashboard");
+  const isDashRoute = location.pathname.startsWith("/dash");
 
   // Memoized toggle functions to prevent unnecessary re-renders
   const toggleMenu = React.useCallback(() => {

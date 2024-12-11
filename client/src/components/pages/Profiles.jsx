@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector,useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { serverLogout } from "../helpers/auth";
+import { serverLogout } from "../../helpers/auth";
 
 export const Profiles = () => {
   const user = useSelector((state) => state.user.userData);
@@ -32,15 +32,15 @@ export const Profiles = () => {
 
   // Dark mode classes
   const bgColor = darkMode ? "bg-gray-900" : "bg-blue-500";
-  const containerBg = darkMode ? "bg-gray-800" : "bg-white";
+  const containerBg = darkMode ? "bg-gray-800" : "bg-gray-100";
   const textColor = darkMode ? "text-gray-200" : "text-gray-600";
   const inputBg = darkMode ? "bg-gray-700 border-gray-600 text-gray-200" : "bg-white border-gray-300 text-gray-700";
-  const headerBg = darkMode ? "bg-gray-700" : "bg-gray-100";
+  const headerBg = darkMode ? "bg-gray-700" : "bg-gray-300";
   const buttonBg = darkMode ? "bg-purple-500 hover:bg-purple-600" : "bg-pink-500 hover:bg-pink-600";
 
   return (
-    <div className={`min-h-screen ${bgColor} py-6`}>
-      <section className="container mx-auto px-4">
+    <div className={`py-6 min-h-screen `}>
+      <section className=" container mx-auto px-4">
         <div className={`${containerBg} shadow-lg rounded-lg overflow-hidden`}>
           <div className={`${headerBg} px-6 py-4 flex justify-between items-center`}>
             <h1 className={`text-xl font-bold ${darkMode ? "text-purple-300" : "text-blue-700"}`}>My Account</h1>
@@ -129,6 +129,6 @@ export const Profiles = () => {
           </div>
         </div>
       </section>
-    </div>
+     </div>
   );
 };

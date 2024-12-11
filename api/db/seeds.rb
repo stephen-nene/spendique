@@ -19,8 +19,8 @@ def create_users(role, count, start_index = 1)
       username: Faker::Internet.unique.username,
       phonenumber: Faker::PhoneNumber.cell_phone,
       email: "#{role}#{start_index + i}@test.com",
-      password: "password",  
-      password_confirmation: "password",  
+      password: "assword",  
+      password_confirmation: "assword",  
       addresses: [
         {
           street: Faker::Address.street_address,
@@ -93,7 +93,7 @@ def generate_finances_for_user_in_month(user, categories, month, year)
         user: user,
         title: case transaction_type
                when :income
-                 ["Salary", "Freelance Work", "Investment Income", "Bonus", "Side Hustle"].sample
+                 ["Tips", "Freelance Work", "Investment Income", "Bonus", "Side Hustle"].sample
                when :expense
                  ["Grocery Shopping", "Restaurant Bill", "Online Purchase", "Utility Payment", "Transportation"].sample
                end,
@@ -143,7 +143,7 @@ months_to_seed.each do |month|
   puts "\n✨ Seeding finances for #{Date::MONTHNAMES[month]}..."
   
   # For each month, generate finances for all users
-  (admin_users + regular_users).each do |user|
+  (regular_users).each do |user|
     generate_finances_for_user_in_month(user, categories, month, year)
   end
 

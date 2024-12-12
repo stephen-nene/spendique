@@ -2,10 +2,22 @@ class CategoriesController < ApplicationController
   before_action :set_category, only: %i[ show update destroy ]
 
   # GET /categories
-  def index
+# GET /categories
+def index
+  if params[:all] == 'true'
+    # Fetch all records without pagination
+    @categories = Category.all
+  else
+    # Apply pagination
     @categories = Category.all.page(params[:page])
-    render json: { categories: @categories.map { |category| CategorySerializer.new(category) }, meta: pagination_meta(@categories) }
   end
+
+  render json: {
+    categories: @categories.map { |category| CategorySerializer.new(category) },
+    meta: pagination_meta(@categories)
+  }
+end
+
 
   # GET /categories/1
   def show
@@ -50,6 +62,7 @@ class CategoriesController < ApplicationController
   end
 
   def pagination_meta(categories)
+     return {} if params[:all] == 'true'
     {
       total_count: categories.total_count,
       total_pages: categories.total_pages,

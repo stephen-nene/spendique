@@ -42,11 +42,12 @@ end
 # Helper to generate random categories
 def seed_categories
   
-  50.times do 
+  30.times do 
     Category.create!(
       # Faker::Company.name
       # Faker::Commerce.department
-      name: Faker::Quote.unique.robin,
+      # Faker::Cannabis.strain
+      name: Faker::Cannabis.unique.strain,
       status: Category.statuses.keys.sample
     )
   end
@@ -119,12 +120,13 @@ def generate_finances_for_user_in_month(user, categories, month, year)
                when :expense
                  ["Grocery Shopping", "Restaurant Bill", "Online Purchase", "Utility Payment", "Transportation"].sample
                end,
-        description: [
-          Faker::Quote.famous_last_words,
-          Faker::Quote.jack_handey,
-          Faker::Quote.matz,
-          Faker::Quote.most_interesting_man_in_the_world
-        ].sample,
+        # description: [
+        #   Faker::Quote.famous_last_words,
+        #   Faker::Quote.jack_handey,
+        #   Faker::Quote.matz,
+        #   Faker::Quote.most_interesting_man_in_the_world
+        # ].sample,
+        description: Faker::Hacker.say_something_smart,
         transaction_type: transaction_type,
         amount: amount,
         transaction_cost: transaction_type == :expense ? rand(0.0..50.0).round(2) : 0.0,

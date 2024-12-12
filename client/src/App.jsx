@@ -31,6 +31,11 @@ const AuthRoutes = {
   Reset: lazy(() => import("./components/pages/auth/Reset")),
 };
 
+const rotectedRoutes = {
+  NewFinance: lazy(() => import("./components/pages/NewFinance"))
+
+}
+
 import "./assets/styles/App.css";
 
 // Fallback Loading Component
@@ -94,6 +99,11 @@ function App() {
                 path="/finances"
                 element={renderProtectedRoute(["admin", "user"], Finances)}
               />
+              <Route
+                path="/finances/new"
+                element={renderProtectedRoute(["admin", "user"], rotectedRoutes.NewFinance)}
+              />
+
 
               {/* Dashboard Routes */}
               <Route path="/dash">

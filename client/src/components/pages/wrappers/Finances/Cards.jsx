@@ -4,7 +4,7 @@ import { message } from "antd"; // Importing Ant Design's message component for 
 import formatDate from './DateChanger'
 export default function Cards({ financeData, dateToView }) {
   const [openExpenses, setOpenExpenses] = useState(false);
-  const [openIncomes, setOpenIncomes] = useState(false);
+  const [openIncomes, setOpenIncomes] = useState(!false);
 
   const formatDate = (date) => date.toISOString().split("T")[0];
   const selectedDate = formatDate(dateToView);

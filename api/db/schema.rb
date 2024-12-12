@@ -32,6 +32,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_07_152920) do
     t.text "title"
     t.float "transaction_cost"
     t.text "description"
+    t.date "date_created"
     t.integer "transaction_type"
     t.float "amount"
     t.json "recurring"

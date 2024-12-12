@@ -58,6 +58,7 @@ def generate_finances_for_user_in_month(user, categories, month, year)
   # Define the start and end date of the month
   start_date = Date.new(year, month, 1)
   end_date = start_date.end_of_month
+  end_date = [end_date, Date.today].min  # Use the earlier of the two dates
   
   # puts "✨ Seeding finances for #{start_date.strftime("%B %Y")} for User: #{user.username}..."
 
@@ -80,13 +81,34 @@ def generate_finances_for_user_in_month(user, categories, month, year)
       finance_categories = Category.all.sample(rand(2..3))
       recurring_data = nil
       if rand < 0.4  # 40% chance for any finance to be recurring
+        # For recurring entries, set frequency and dates properly
+        frequency = ['daily', 'weekly', 'monthly'].sample
+        start_date_recurring = date
+        next_payment_date = case frequency
+                            when 'daily'
+                              start_date_recurring + rand(1..3).days  # Random daily next payment
+                            when 'weekly'
+                              start_date_recurring + rand(1..7).days  # Random weekly next payment
+                            when 'monthly'
+                              # Add a month to the current date, but ensure it's within the next few months
+                              start_date_recurring.next_month(rand(1..3))  # Random month within 1-3 months
+                            else
+                              start_date_recurring
+                            end
+        
+        # Make sure the next payment date does not go beyond today
+        next_payment_date = [next_payment_date, Date.today].min  # Ensure it does not exceed today
+
+        end_date_recurring = next_payment_date + rand(30..180).days  # End within 1 to 6 months
+        amount_variation = rand(0..5) == 0 ? rand(5.0..50.0).round(2) : 0.0  # 20% chance of amount variation each time
+        
         recurring_data = {
-          frequency: ['daily', 'weekly', 'monthly'].sample,
-          start_date: date,
-          next_payment_date: date + (rand(1..30).days),  # Random next payment date within the month
-          end_date: date + rand(30..180).days,  # Random end date within 1 to 6 months
-          amount_variation: rand(0..5) == 0 ? rand(5.0..50.0).round(2) : 0.0,  # 20% chance of amount variation each time
-          notes: ["fixed cost", "estimated amount", "variable cost"].sample # Add some variation in notes
+          frequency: frequency,
+          start_date: start_date_recurring,
+          next_payment_date: next_payment_date,
+          end_date: end_date_recurring,
+          amount_variation: amount_variation,
+          notes: ["fixed cost", "estimated amount", "variable cost"].sample # Random notes
         }
       end
       finance = Finance.create!(
@@ -135,7 +157,7 @@ puts "🎉 Seeding complete! #{User.count} users have been added: #{admin_users.
 puts "\n✨ Seeding finances for months 9, 10, 11... 💰"
 
 # Define the months to generate finances for
-months_to_seed = [9, 10, 11] # September, October, November, December
+months_to_seed = [10, 11, 12] # September, October, November, December
 year = Date.today.year
 
 

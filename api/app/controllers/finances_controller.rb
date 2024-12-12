@@ -1,5 +1,6 @@
 class FinancesController < ApplicationController
   before_action :set_finance, only: %i[ show update destroy ]
+  include PaginationAndSerialization
 
   # GET /finances
   def index
@@ -12,17 +13,17 @@ class FinancesController < ApplicationController
   
       if params[:only_my_records] == 'true'
         # Fetch records only associated with the logged-in user
-        @finances = user.finances.page(params[:page])
+        @finances = user.finances.order(created_at: :desc).page(params[:page])
       elsif user.admin?
         # Fetch all records for admins
-        @finances = Finance.all.page(params[:page])
+        @finances = Finance.all.order(created_at: :desc).page(params[:page])
       else
         # Fetch records only associated with the user
-        @finances = user.finances.page(params[:page])
+        @finances = user.finances.order(created_at: :desc).page(params[:page])
       end
   
       render json: { 
-        finances: @finances.map { |finance| FinanceSerializer.new(finance) }, 
+        finances: serialize_collection(@finances, FinanceSerializer),
         meta: pagination_meta(@finances) 
       }
     else
@@ -73,16 +74,16 @@ class FinancesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def finance_params
-    params.expect(finance: [:user_id, :title, :transaction_cost, :description, :transaction_type, :amount, recurring: {}])
+    params.expect(finance: [:user_id, :title, :transaction_cost, :description,:date_created, :transaction_type, :amount, recurring: {}])
   end
 
-  def pagination_meta(finances)
-    {
-      total_count: finances.total_count,
-      total_pages: finances.total_pages,
-      next_page: finances.next_page,
-      current_page: finances.current_page,
-      per_page: finances.limit_value,
-    }
-  end
+  # def pagination_meta(finances)
+  #   {
+  #     total_count: finances.total_count,
+  #     total_pages: finances.total_pages,
+  #     next_page: finances.next_page,
+  #     current_page: finances.current_page,
+  #     per_page: finances.limit_value,
+  #   }
+  # end
 end

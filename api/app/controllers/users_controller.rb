@@ -17,6 +17,8 @@ end
     render json: @user, include_associations: true
   end
 
+  # GET /users/1/finances
+
   # POST /users
   def create
     @user = User.new(user_params)

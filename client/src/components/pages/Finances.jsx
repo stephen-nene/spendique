@@ -1,50 +1,55 @@
-import React, { useState } from 'react';
-import { Input, FloatButton, message } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import React, { useState, useEffect } from "react";
+import { FloatButton, message } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+import { fetchFinances } from "../../helpers/normal";
 
+import Cards from "./wrappers/Finances/Cards";
+import DateChanger from "./wrappers/Finances/DateChanger.jsx";
 export default function Finances() {
+  const [financeData, setFinanceData] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [lastFetchedDate, setLastFetchedDate] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const formatDate = (date) => date.toISOString().split("T")[0];
 
-  // Format date as YYYY-MM-DD
-  const formatDate = (date) => date.toISOString().split('T')[0];
-
-  // Move date forward or backward by 1 day
-  const changeDate = (days) => {
-    setSelectedDate((prevDate) => new Date(prevDate.setDate(prevDate.getDate() + days)));
+  const getFinances = async (page = 1) => {
+    await fetchFinances(page, setFinanceData, setLastFetchedDate);
+    setCurrentPage(page);
   };
 
+
+  const selectedDateObj =formatDate(selectedDate);
+   
+  // const lastFetchedDateObj = formatDate(lastFetchedDate);
+  const lastFetchedDateObj = formatDate(new Date(lastFetchedDate));
+// console.log(formatDate(selectedDate),formatDate(new Date(lastFetchedDate)))
+  useEffect(() => {
+    // console.log("Running useeffect...");
+    if (lastFetchedDate) {
+      // console.log("Fetching next page...",lastFetchedDateObj);
+
+      // If the selected date is after the last fetched date, get the next page
+      if (selectedDateObj === lastFetchedDateObj) {
+        console.log("latest",lastFetchedDateObj,currentPage,selectedDateObj);
+        setCurrentPage((prevPage) => prevPage + 1);
+        getFinances(currentPage + 1);
+      }
+    }
+    
+    // If no data has been fetched yet, fetch the first page.
+    if (!financeData || financeData.length === 0) {
+      getFinances(1); // Fetch the first page if no data exists yet
+    }
+  }, [selectedDate]);
+  
   return (
     <div className="p-6 font-sans">
-      {/* Header Section */}
-      {/* <h1 className="text-2xl font-bold mb-4">Finances</h1> */}
-
-      {/* Date Selector */}
-      <div className="flex items-center justify-center space-x-4 mb-8">
-        <button
-          className="text-xl text-gray-600 hover:text-blue-600"
-          onClick={() => changeDate(-1)}
-        >
-          <FaChevronLeft />
-        </button>
-        <Input
-          type="date"
-          value={formatDate(selectedDate)}
-          onChange={(e) => setSelectedDate(new Date(e.target.value))}
-          className="w-48"
-        />
-        <button
-          className="text-xl text-gray-600 hover:text-blue-600"
-          onClick={() => changeDate(1)}
-        >
-          <FaChevronRight />
-        </button>
-      </div>
-
-      {/* Display Selected Date */}
-      <p className="text-center text-lg text-gray-700">
-        You are at <span className="font-bold text-blue-600">{formatDate(selectedDate)}</span>
-      </p>
+      <DateChanger
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
+      />
+      {/* Cards */}
+      <Cards financeData={financeData} dateToView={selectedDate} />
 
       {/* Float Button */}
       <FloatButton

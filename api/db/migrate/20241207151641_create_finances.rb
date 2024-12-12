@@ -5,6 +5,7 @@ class CreateFinances < ActiveRecord::Migration[8.0]
       t.text :title
       t.float :transaction_cost
       t.text :description
+      t.date :date_created
       t.integer :transaction_type, index: true 
       t.float :amount
       t.json :recurring

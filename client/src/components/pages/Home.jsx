@@ -1,11 +1,11 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import Heros from './wrappers/Heros'
-import Services from './wrappers/Services'
-import Stats from './wrappers/Stats'
-import Testimonials from './wrappers/Testimonials'
-import Teams from './wrappers/Teams'
-import Pricings from './wrappers/Pricings'
+import Heros from './wrappers/Home/Heros'
+import Services from './wrappers/Home/Services'
+import Stats from './wrappers/Home/Stats'
+import Testimonials from './wrappers/Home/Testimonials'
+import Teams from './wrappers/Home/Teams'
+import Pricings from './wrappers/Home/Pricings'
 export const Home = () => {
   return (
     <>

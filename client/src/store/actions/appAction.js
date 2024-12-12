@@ -13,8 +13,6 @@ export const setUserPageData = (page, data) => {
   };
 };
 
-
-
 export const setCategoriesPageData = (page,data) => {
   return {
     type: "SET_CATEGORIES_PAGE_DATA",
@@ -27,4 +25,8 @@ export const setFinancesPageData = (page,data) => {
     type: "SET_FINANCES_PAGE_DATA",
     payload: { page, data },
   };
+}
+
+export const getUserFinances=()=>{
+
 }

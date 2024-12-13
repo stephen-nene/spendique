@@ -6,7 +6,7 @@ import {
   MdInfo,
   MdOutlineDelete,
 } from "react-icons/md";
-import { fetchScholarships } from "../../helpers/admins.js";
+import { fetchScholarships } from "../../../helpers/admins.js";
 import { useSelector, useDispatch } from "react-redux";
 
 export default function Scholarships({ darkMode }) {

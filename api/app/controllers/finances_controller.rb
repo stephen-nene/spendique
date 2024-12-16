@@ -39,7 +39,10 @@ class FinancesController < ApplicationController
 
   # POST /finances
   def create
-    @finance = Finance.new(finance_params)
+    finance_params_with_user = finance_params.merge(user_id: finance_params[:user_id] || session[:user_id])
+
+    # Create a new finance entry
+    @finance = Finance.new(finance_params_with_user)
 
     if @finance.save
       render json: @finance, status: :created, location: @finance
@@ -74,7 +77,7 @@ class FinancesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def finance_params
-    params.expect(finance: [:user_id, :title, :transaction_cost, :description,:date_created, :transaction_type, :amount, recurring: {}])
+    params.expect(finance: [:user_id, :title, :transaction_cost, :description,:transaction_type, :amount, recurring: {}])
   end
 
   # def pagination_meta(finances)

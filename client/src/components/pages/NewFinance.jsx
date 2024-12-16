@@ -1,4 +1,4 @@
-import React, { useState,useRef } from "react";
+import React, { useState, useRef } from "react";
 import {
   Form,
   Input,
@@ -9,16 +9,17 @@ import {
   Button,
   Breadcrumb,
   Divider,
-  Space
+  Space,
+  message,
 } from "antd";
 import {
-    PlusOutlined,
+  PlusOutlined,
   DollarOutlined,
   CalendarOutlined,
   FileTextOutlined,
   TagOutlined,
 } from "@ant-design/icons";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import apiClient from "../../helpers/apiClient";
 const { TextArea } = Input;
 const { Option } = Select;
@@ -28,28 +29,23 @@ const NewFinance = () => {
   const [isRecurring, setIsRecurring] = useState(false);
   const [categories, setCategories] = useState([]);
   const [newCategoryName, setNewCategoryName] = useState(""); // State for the new category input
-  const inputRef = useRef(null); // Ref to manage the input focus
+  const inputRef = useRef(null); 
+  const navigate = useNavigate();
 
-  // Mock categories (would typically come from backend)
-//   const categories = [
-//     { id: 1, name: "Food" },
-//     { id: 2, name: "Transport" },
-//     { id: 3, name: "Entertainment" },
-//     { id: 4, name: "Utilities" },
-//   ];
+  // const userData = use
 
   React.useEffect(() => {
     async function getCategory() {
-      const response = await apiClient.get(
-        `/categories?all=true`
-      );
+      const response = await apiClient.get(`/categories?all=true`);
       if (response.status === 200) {
-          setCategories(response?.data?.categories);
-          const approvedCategories = categories.filter(category => category.status === 'approved');
+        setCategories(response?.data?.categories);
+        const approvedCategories = categories.filter(
+          (category) => category.status === "approved"
+        );
       }
     }
     getCategory();
-},[]);
+  }, []);
 
   // Handle adding a new category
   const handleAddCategory = async (e) => {
@@ -78,48 +74,34 @@ const NewFinance = () => {
     { id: 2, name: "Expense" },
   ];
 
-  const recurringFrequencies = [
-    { id: "daily", name: "Daily" },
-    { id: "weekly", name: "Weekly" },
-    { id: "biweekly", name: "Bi-Weekly" },
-    { id: "monthly", name: "Monthly" },
-    { id: "quarterly", name: "Quarterly" },
-    { id: "annually", name: "Annually" },
-  ];
 
-  const recurringNoteOptions = [
-    "Fixed Cost",
-    "Estimated Amount",
-    "Variable Cost",
-  ];
 
-  const handleSubmit = (values) => {
-    // Prepare the finance entry data
-    const financeEntry = {
+const handleSubmit = async (values) => {
+  const financeEntry = {
+    finance: {
       ...values,
-      recurring: isRecurring
-        ? {
-            frequency: values.recurring_frequency,
-            start_date: values.recurring_start_date
-              ? values.recurring_start_date.format("YYYY-MM-DD")
-              : null,
-            next_payment_date: values.recurring_next_payment_date
-              ? values.recurring_next_payment_date.format("YYYY-MM-DD")
-              : null,
-            end_date: values.recurring_end_date
-              ? values.recurring_end_date.format("YYYY-MM-DD")
-              : null,
-            amount_variation: values.recurring_amount_variation,
-            notes: values.recurring_notes || [],
-          }
-        : null,
-      //   date_created: values.date_created.format("YYYY-MM-DD"),
-      transaction_cost: values.amount,
-    };
-
-    // Log to console (for now)
-    console.log("Finance Entry:", financeEntry);
+      transaction_type: parseInt(values.transaction_type, 10), // Ensure it's an integer
+    },
   };
+
+  // console.log("Finance Entry:", financeEntry);
+
+  try {
+    const res = await apiClient.post("/finances", financeEntry);
+    if (res.status === 201) {
+      navigate('/finances')
+      message.success("Finance entry created successfully!", 3);      
+    } else {
+      console.log(res);
+      message.error("Failed to create finance entry. Please try again.", 3);
+    }
+
+  } catch (e) {
+    console.error("Error creating finance entry:", e);
+    message.error("Failed to create finance entry. Please try again.", 3);
+  }
+};
+
 
   return (
     <div className="container mx-auto px-4 py-6">
@@ -163,20 +145,41 @@ const NewFinance = () => {
         </Form.Item>
 
         {/* Amount */}
-        <Form.Item
-          name="amount"
-          label="Amount"
-          rules={[{ required: true, message: "Please enter the amount" }]}
-        >
-          <InputNumber
-            className="w-full"
-            prefix={<DollarOutlined className="text-gray-400" />}
-            formatter={(value) =>
-              `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-            }
-            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-          />
-        </Form.Item>
+        <div className="flex w-full gap-6 items-end">
+          {/* Amount Input */}
+          <Form.Item
+            name="amount"
+            label="Amount"
+            rules={[{ required: true, message: "Please enter the amount" }]}
+            className="flex-1"
+          >
+            <InputNumber
+              className="w-full"
+              prefix={<DollarOutlined className="text-gray-400" />}
+              formatter={(value) =>
+                `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+              }
+              parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+            />
+          </Form.Item>
+
+          {/* Transaction Cost Input */}
+          <Form.Item
+            name="transaction_cost"
+            label="Transaction Cost"
+            rules={[{ required: true, message: "Please enter the gas fee" }]}
+            className="flex-1"
+          >
+            <InputNumber
+              className="w-full"
+              prefix={<DollarOutlined className="text-gray-400" />}
+              formatter={(value) =>
+                `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+              }
+              parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+            />
+          </Form.Item>
+        </div>
 
         {/* Transaction Type */}
         <Form.Item
@@ -187,68 +190,57 @@ const NewFinance = () => {
           ]}
         >
           <Select placeholder="Select transaction type">
-            {transactionTypes.map((type) => (
-              <Option key={type.id} value={type.id}>
-                {type.name}
-              </Option>
-            ))}
+            <Option key={0} value={0}>
+              Income
+            </Option>
+            <Option key={1} value={1}>
+              Expense
+            </Option>
           </Select>
         </Form.Item>
 
         {/* Category */}
         <Form.Item
-      name="category_id"
-      label="Category"
-      rules={[{ required: true, message: "Please select a category" }]}
-      >
-      <Select
-        prefix={<TagOutlined className="text-gray-400" />}
-        showSearch
-        style={{ width: "100%" }}
-        placeholder="Select or create a category"
-        filterOption={(input, option) =>
-          option?.label.toLowerCase().includes(input.toLowerCase())
-        }
-        dropdownRender={(menu) => (
-          <>
-            {menu}
-            <Divider style={{ margin: "8px 0" }} />
-            <Space style={{ padding: "0 8px 4px" }}>
-              <Input
-                placeholder="Enter new category name"
-                ref={inputRef}
-                value={newCategoryName}
-                onChange={(e) => setNewCategoryName(e.target.value)}
-                onKeyDown={(e) => e.stopPropagation()} // Prevent dropdown from closing on Enter
-              />
-              <Button
-                type="text"
-                icon={<PlusOutlined />}
-                onClick={handleAddCategory}
-              >
-                Add Category
-              </Button>
-            </Space>
-          </>
-        )}
-        options={categories.map((category) => ({
-          label: category.name,
-          value: category.id,
-        }))}
-      />
-    </Form.Item>
-
-        {/* Date */}
-        {/* <Form.Item
-          name="date_created"
-          label="Date"
-          rules={[{ required: true, message: "Please select a date" }]}
+          name="category_id"
+          label="Category"
+          rules={[{ required: true, message: "Please select a category" }]}
         >
-          <DatePicker
-            className="w-full"
-            prefix={<CalendarOutlined className="text-gray-400" />}
+          <Select
+            prefix={<TagOutlined className="text-gray-400" />}
+            showSearch
+            style={{ width: "100%" }}
+            placeholder="Select or create a category"
+            filterOption={(input, option) =>
+              option?.label.toLowerCase().includes(input.toLowerCase())
+            }
+            dropdownRender={(menu) => (
+              <>
+                {menu}
+                <Divider style={{ margin: "8px 0" }} />
+                <Space style={{ padding: "0 8px 4px" }}>
+                  <Input
+                    placeholder="Enter new category name"
+                    ref={inputRef}
+                    value={newCategoryName}
+                    onChange={(e) => setNewCategoryName(e.target.value)}
+                    onKeyDown={(e) => e.stopPropagation()} // Prevent dropdown from closing on Enter
+                  />
+                  <Button
+                    type="text"
+                    icon={<PlusOutlined />}
+                    onClick={handleAddCategory}
+                  >
+                    Add Category
+                  </Button>
+                </Space>
+              </>
+            )}
+            options={categories.map((category) => ({
+              label: category.name,
+              value: category.id,
+            }))}
           />
-        </Form.Item> */}
+        </Form.Item>
 
         {/* Description */}
         <Form.Item name="description" label="Description">
@@ -259,98 +251,15 @@ const NewFinance = () => {
         </Form.Item>
 
         {/* Recurring Toggle */}
-        <Form.Item label="Recurring Transaction">
-          <Switch checked={isRecurring} onChange={setIsRecurring} />
+        <Form.Item label="Recurring Transaction ?">
+          <Switch
+            checked={isRecurring}
+            onClick={() => message.error("only for premium users", 3)}
+          />
         </Form.Item>
 
         {/* Recurring Details (if enabled) */}
-        {isRecurring && (
-          <div className="space-y-4">
-            {/* Frequency */}
-            <Form.Item
-              name="recurring_frequency"
-              label="Recurring Frequency"
-              rules={[
-                { required: isRecurring, message: "Please select a frequency" },
-              ]}
-            >
-              <Select placeholder="Select recurring frequency">
-                {recurringFrequencies.map((freq) => (
-                  <Option key={freq.id} value={freq.id}>
-                    {freq.name}
-                  </Option>
-                ))}
-              </Select>
-            </Form.Item>
-
-            <div className="flex justify-between flex-col sm:flex-row">
-              {/* Start Date */}
-              <Form.Item
-                name="recurring_start_date"
-                label="Start Date"
-                rules={[
-                  {
-                    required: isRecurring,
-                    message: "Please select a start date",
-                  },
-                ]}
-              >
-                <DatePicker className="w-full" />
-              </Form.Item>
-
-              {/* Next Payment Date */}
-              <Form.Item
-                name="recurring_next_payment_date"
-                label="Next Payment Date"
-                rules={[
-                  {
-                    required: isRecurring,
-                    message: "Please select next payment date",
-                  },
-                ]}
-              >
-                <DatePicker className="w-full" />
-              </Form.Item>
-
-              {/* End Date */}
-              <Form.Item name="recurring_end_date" label="End Date">
-                <DatePicker
-                  className="w-full"
-                  placeholder="Optional end date"
-                />
-              </Form.Item>
-            </div>
-
-            {/* Amount Variation */}
-            <Form.Item
-              name="recurring_amount_variation"
-              label="Amount Variation"
-            >
-              <InputNumber
-                size="large"
-                className="w-full"
-                formatter={(value) => `± ${value}%`}
-                parser={(value) => value.replace("± ", "").replace("%", "")}
-                placeholder="Optional percentage variation"
-              />
-            </Form.Item>
-
-            {/* Recurring Notes */}
-            <Form.Item name="recurring_notes" label="Recurring Notes">
-              <Select
-                mode="multiple"
-                placeholder="Select notes about this recurring transaction"
-                style={{ width: "100%" }}
-              >
-                {recurringNoteOptions.map((note) => (
-                  <Option key={note} value={note}>
-                    {note}
-                  </Option>
-                ))}
-              </Select>
-            </Form.Item>
-          </div>
-        )}
+        {isRecurring && <Recurring />}
 
         {/* Submit Button */}
         <Form.Item>
@@ -364,3 +273,87 @@ const NewFinance = () => {
 };
 
 export default NewFinance;
+
+const Recurring = () => {
+    const recurringFrequencies = [
+      { id: "daily", name: "Daily" },
+      { id: "weekly", name: "Weekly" },
+      { id: "biweekly", name: "Bi-Weekly" },
+      { id: "monthly", name: "Monthly" },
+      { id: "quarterly", name: "Quarterly" },
+      { id: "annually", name: "Annually" },
+    ];
+
+    const recurringNoteOptions = [
+      "Fixed Cost",
+      "Estimated Amount",
+      "Variable Cost",
+    ];
+  return (
+    <div className="space-y-4">
+      {/* Frequency */}
+      <Form.Item
+        name="recurring_frequency"
+        label="Recurring Frequency"
+        rules={[
+          { required: isRecurring, message: "Please select a frequency" },
+        ]}
+      >
+        <Select placeholder="Select recurring frequency">
+          {recurringFrequencies.map((freq) => (
+            <Option key={freq.id} value={freq.id}>
+              {freq.name}
+            </Option>
+          ))}
+        </Select>
+      </Form.Item>
+
+      <div className="flex justify-between flex-col sm:flex-row">
+        {/* Start Date */}
+        <Form.Item
+          name="recurring_start_date"
+          label="Start Date"
+          rules={[
+            {
+              required: isRecurring,
+              message: "Please select a start date",
+            },
+          ]}
+        >
+          <DatePicker className="w-full" />
+        </Form.Item>
+
+        {/* End Date */}
+        <Form.Item name="recurring_end_date" label="End Date">
+          <DatePicker className="w-full" placeholder="Optional end date" />
+        </Form.Item>
+      </div>
+
+      {/* Amount Variation */}
+      <Form.Item name="recurring_amount_variation" label="Amount Variation">
+        <InputNumber
+          size="large"
+          className="w-full"
+          formatter={(value) => `± ${value}%`}
+          parser={(value) => value.replace("± ", "").replace("%", "")}
+          placeholder="Optional percentage variation"
+        />
+      </Form.Item>
+
+      {/* Recurring Notes */}
+      <Form.Item name="recurring_notes" label="Recurring Notes">
+        <Select
+          mode="multiple"
+          placeholder="Select notes about this recurring transaction"
+          style={{ width: "100%" }}
+        >
+          {recurringNoteOptions.map((note) => (
+            <Option key={note} value={note}>
+              {note}
+            </Option>
+          ))}
+        </Select>
+      </Form.Item>
+    </div>
+  );
+};

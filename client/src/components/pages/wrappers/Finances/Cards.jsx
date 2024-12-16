@@ -1,44 +1,169 @@
 import React, { useState } from "react";
 import { FcExpand, FcCollapse } from "react-icons/fc";
-import { message } from "antd"; // Importing Ant Design's message component for notifications
-import formatDate from './DateChanger'
-export default function Cards({ financeData, dateToView }) {
-  const [openExpenses, setOpenExpenses] = useState(false);
-  const [openIncomes, setOpenIncomes] = useState(!false);
+import { message, Modal } from "antd";
+import apiClient from "../../../../helpers/apiClient";
+
+export default function FinanceCards({ financeData, dateToView, onDelete }) {
+  const [openSections, setOpenSections] = useState({
+    income: true,
+    expense: false,
+  });
 
   const formatDate = (date) => date.toISOString().split("T")[0];
+
+  const formatDateTime = (date) => {
+    return new Intl.DateTimeFormat("en-US", {
+      weekday: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    }).format(new Date(date));
+  };
+
   const selectedDate = formatDate(dateToView);
 
-  const expenses = financeData
-    ? financeData.filter((finance) => {
-        const financeDate = finance.created_at
-          ? new Date(finance.created_at).toISOString().split('T')[0]
-          : null;
-        return finance.transaction_type === "expense" && financeDate === selectedDate;
-      })
-    : [];
+  const filterFinanceByType = (type) =>
+    financeData
+      ? financeData.filter((finance) => {
+          const financeDate = finance.created_at
+            ? new Date(finance.created_at).toISOString().split("T")[0]
+            : null;
+          return (
+            finance.transaction_type === type && financeDate === selectedDate
+          );
+        })
+      : [];
 
-  const incomes = financeData
-    ? financeData.filter((finance) => {
-        const financeDate = finance.created_at
-          ? new Date(finance.created_at).toISOString().split('T')[0]
-          : null;
-        return finance.transaction_type === "income" && financeDate === selectedDate;
-      })
-    : [];
+  const incomes = filterFinanceByType("income");
+  const expenses = filterFinanceByType("expense");
 
-  const toggleExpenses = () => {
-    setOpenExpenses(!openExpenses);
-    setOpenIncomes(false); // Close incomes when expenses are toggled
+  const totalIncome = incomes.reduce((sum, income) => sum + income.amount, 0);
+  const totalExpenses = expenses.reduce(
+    (sum, expense) => sum + expense.amount,
+    0
+  );
+
+  const toggleSection = (type) => {
+    setOpenSections((prev) => ({
+      income: type === "income" ? !prev.income : false,
+      expense: type === "expense" ? !prev.expense : false,
+    }));
   };
 
-  const toggleIncomes = () => {
-    setOpenIncomes(!openIncomes);
-    setOpenExpenses(false); // Close expenses when incomes are toggled
+  const handleItemDelete = (finance) => {
+    Modal.confirm({
+      title: "Delete Finance Entry",
+      content: `Are you sure you want to delete "${finance.title}"?`,
+      okText: "Yes, Delete",
+      okType: "danger",
+      cancelText: "No, Cancel",
+      onOk: async () => {
+        try {
+          await apiClient.delete(`/finances/${finance.id}`);
+          message.success(`Successfully deleted ${finance.title}`);
+
+          // Call the onDelete prop to trigger parent component to refresh data
+          if (onDelete) {
+            onDelete(finance.id);
+          }
+        } catch (error) {
+          console.error("Error deleting finance entry:", error);
+          message.error("Failed to delete the entry. Please try again.");
+        }
+      },
+      onCancel() {
+        // Do nothing when cancelled
+      },
+    });
   };
 
-  const handleItemClick = (title) => {
-    message.success(`You clicked on ${title}`);
+  const renderFinanceSection = (type, items, total) => {
+    const isOpen =
+      type === "income" ? openSections.income : openSections.expense;
+    const bgColors = {
+      income: {
+        main: "bg-green-400",
+        item: "bg-green-100",
+        totalText: "text-green-900",
+      },
+      expense: {
+        main: "bg-rose-400",
+        item: "bg-rose-300",
+        totalText: "text-red-950",
+      },
+    }[type];
+
+    return (
+      <div
+        className={`rounded-lg ${bgColors.main} transition-all`}
+        role="accordion"
+      >
+        <button
+          type="button"
+          className="w-full text-base font-semibold text-left p-6 text-gray-800 flex items-center"
+          onClick={() => toggleSection(type)}
+        >
+          <span className="mr-4 capitalize">{type}s</span>
+          <span className={`text-md font-medium ${bgColors.totalText}`}>
+            ${total.toFixed(2)}
+          </span>
+          {isOpen ? (
+            <FcCollapse className="text-2xl fill-current ml-auto shrink-0" />
+          ) : (
+            <FcExpand className="text-2xl fill-current ml-auto shrink-0" />
+          )}
+        </button>
+
+        {isOpen && (
+          <div className="pb-6 px-6">
+            {items.length > 0 ? (
+              items.map((finance) => (
+                <div
+                  key={finance.id}
+                  className={`my-2 cursor-pointer hover:bg-gray-100 ${bgColors.item} p-2 rounded-lg group`}
+                >
+                  <div onClick={() => handleItemDelete(finance)}>
+                    <h4 className="font-semibold">{finance.title}</h4>
+                    <p>{finance.description}</p>
+                    <p>
+                      <strong>Amount:</strong> ${finance.amount}
+                    </p>
+                    <p>
+                      <strong>Transaction Cost:</strong> $
+                      {finance.transaction_cost}
+                    </p>
+                    {finance.recurring && (
+                      <p>
+                        <strong>Recurring:</strong>{" "}
+                        {finance.recurring.frequency} until{" "}
+                        {finance.recurring.end_date}
+                      </p>
+                    )}
+                    <p>
+                      <strong>Created At:</strong>{" "}
+                      {formatDateTime(finance.created_at)}
+                    </p>
+                  </div>
+                  <div className="hidden group-hover:block text-right mt-2">
+                    <button
+                      className="text-red-600 hover:text-red-800 font-semibold"
+                      onClick={() => handleItemDelete(finance)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="pb-6 text-center text-gray-500">
+                <p>No {type} records available.</p>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    );
   };
 
   // Check if no data found for both expenses and incomes
@@ -47,7 +172,6 @@ export default function Cards({ financeData, dateToView }) {
 
   return (
     <div className="font-[sans-serif] space-y-4 max-w-5xl mx-auto mt-4">
-      {/* Display a message if there's no data */}
       {noDataMessage ? (
         <div className="bg-yellow-100 p-4 rounded-lg text-center text-gray-800">
           <h3>No finance data available.</h3>
@@ -58,113 +182,16 @@ export default function Cards({ financeData, dateToView }) {
         </div>
       ) : (
         <>
-          <div
-            className="rounded-lg bg-green-400 transition-all"
-            role="accordion"
-          >
-            <button
-              type="button"
-              className="w-full text-base font-semibold text-left p-6 text-gray-800 flex items-center"
-              onClick={toggleIncomes}
-            >
-              <span className="mr-4">Incomes</span>
-              {openIncomes ? (
-                <FcCollapse className="text-2xl fill-current ml-auto shrink-0" />
-              ) : (
-                <FcExpand className="text-2xl fill-current ml-auto shrink-0" />
-              )}
-            </button>
-            {openIncomes && incomes.length > 0 && (
-              <div className="pb-6 px-6">
-                {incomes.map((finance) => (
-                  <div
-                    key={finance.id}
-                    className="my-2 cursor-pointer hover:bg-gray-100 bg-green-100 p-2 rounded-lg"
-                    onClick={() => handleItemClick(finance.title)}
-                  >
-                    <h4 className="font-semibold">{finance.title}</h4>
-                    <p>{finance.description}</p>
-                    <p>
-                      <strong>Amount:</strong> ${finance.amount}
-                    </p>
-                    <p>
-                      <strong>Transaction Cost:</strong> $
-                      {finance.transaction_cost}
-                    </p>
-                    {finance.recurring && (
-                      <p>
-                        <strong>Recurring:</strong>{" "}
-                        {finance.recurring.frequency} until{" "}
-                        {finance.recurring.end_date}
-                      </p>
-                    )}
-                    <p>
-                      <strong>Created At:</strong> {finance.created_at}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            )}
-            {openIncomes && incomes.length === 0 && (
-              <div className="pb-6 text-center text-gray-500">
-                <p>No income records available.</p>
-              </div>
-            )}
-          </div>
+          {renderFinanceSection("income", incomes, totalIncome)}
+          {renderFinanceSection("expense", expenses, totalExpenses)}
 
-          {/* Expenses Section */}
-          <div
-            className="rounded-lg bg-rose-400 transition-all"
-            role="accordion"
-          >
-            <button
-              type="button"
-              className="w-full text-base font-semibold text-left p-6 text-gray-800 flex items-center"
-              onClick={toggleExpenses}
-            >
-              <span className="mr-4">Expenses</span>
-              {openExpenses ? (
-                <FcCollapse className="text-2xl fill-current ml-auto shrink-0" />
-              ) : (
-                <FcExpand className="text-2xl fill-current ml-auto shrink-0" />
-              )}
-            </button>
-            {openExpenses && expenses.length > 0 && (
-              <div className="pb-6 px-6">
-                {expenses.map((finance) => (
-                  <div
-                    key={finance.id}
-                    className="my-2 bg-rose-300 cursor-pointer hover:bg-gray-100 p-2 rounded-md"
-                    onClick={() => handleItemClick(finance.title)}
-                  >
-                    <h4 className="font-semibold">{finance.title}</h4>
-                    <p>{finance.description}</p>
-                    <p>
-                      <strong>Amount:</strong> ${finance.amount}
-                    </p>
-                    <p>
-                      <strong>Transaction Cost:</strong> $
-                      {finance.transaction_cost}
-                    </p>
-                    {finance.recurring && (
-                      <p>
-                        <strong>Recurring:</strong>{" "}
-                        {finance.recurring.frequency} until{" "}
-                        {finance.recurring.end_date}
-                      </p>
-                    )}
-                    <p>
-                      <strong>Created At:</strong> {finance.created_at}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            )}
-            {openExpenses && expenses.length === 0 && (
-              <div className="pb-4 text-center text-gray-500">
-                <p>No expense records available.</p>
-              </div>
-            )}
+          <div className="flex items-center justify-between p-6">
+            <span className="text-lg font-extrabold text-gray-800">
+              Daily Summary
+            </span>
+            <span className="text-2xl font-semibold text-red-500">
+              $ {new Intl.NumberFormat().format(totalIncome - totalExpenses)}
+            </span>
           </div>
         </>
       )}

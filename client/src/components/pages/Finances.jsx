@@ -19,6 +19,10 @@ export default function Finances() {
     }
     return "";
   };
+  const handleDeleteFinance = (deletedId) => {
+    // Remove the deleted item from the local state
+    setFinanceData((prev) => prev.filter((item) => item.id !== deletedId));
+  };
 
   const getFinances = async (page = 1) => {
    const serverRes = await fetchFinances(page, setFinanceData, setLastFetchedDate);
@@ -35,7 +39,7 @@ export default function Finances() {
       getFinances(1); // Fetch the first page if no data exists yet
     }
 
-    if (lastFetchedDate && selectedDateObj === lastFetchedDateObj) {
+    if (lastFetchedDate && selectedDateObj <= lastFetchedDateObj) {
       setCurrentPage((prevPage) => prevPage + 1);
       getFinances(currentPage + 1);
     }
@@ -43,14 +47,21 @@ export default function Finances() {
 
   return (
     <div className="p-6 font-sans">
-      <DateChanger selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
-      <Cards financeData={financeData} dateToView={selectedDate} />
-      <Link to='/finances/new'>
-      <FloatButton
-        icon={<PlusOutlined />}
-        tooltip="Create New Category"
-        // onClick={() => message.success("Creating new category...")}
+      <DateChanger
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
       />
+      <Cards
+        financeData={financeData}
+        dateToView={selectedDate}
+        onDelete={handleDeleteFinance}
+      />
+      <Link to="/finances/new">
+        <FloatButton
+          icon={<PlusOutlined />}
+          tooltip="Create New Category"
+          // onClick={() => message.success("Creating new category...")}
+        />
       </Link>
     </div>
   );

@@ -158,10 +158,10 @@ const handleSubmit = async (values) => {
               size="large"
               className="w-full"
               prefix={<DollarOutlined className="text-gray-400" />}
-              formatter={(value) =>
-                `Ksh ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+              formatter={
+                (value) => `KSh ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",") // Replaced $ with KSh
               }
-              parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+              parser={(value) => value.replace(/KSh\s?|(,*)/g, "")} // Replaced $ with KSh
             />
           </Form.Item>
 
@@ -176,10 +176,10 @@ const handleSubmit = async (values) => {
               size="large"
               className="w-1/2"
               prefix={<DollarOutlined className="text-gray-400" />}
-              formatter={(value) =>
-                `Ksh ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+              formatter={
+                (value) => `KSh ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",") // Replaced $ with KSh
               }
-              parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+              parser={(value) => value.replace(/KSh\s?|(,*)/g, "")} // Replaced $ with KSh
             />
           </Form.Item>
         </div>

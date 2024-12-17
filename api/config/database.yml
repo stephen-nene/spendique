@@ -9,6 +9,17 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   timeout: 5000
 
+# default: &default
+#     adapter: postgresql
+#     encoding: unicode
+#     pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+#     database: <%= ENV["PG_DATABASE"] || "spendique" %>
+#     username: <%= ENV["PG_USERNAME"] || "postgres" %>
+#     password: <%= ENV["PG_PASSWORD"] || "" %>
+#     host: <%= ENV["PG_HOST"] || "localhost" %>
+#     port: <%= ENV["PG_PORT"] || 5432 %>
+
+
 development:
   <<: *default
   database: storage/development.sqlite3
@@ -25,8 +36,15 @@ test:
 # is mounted as a persistent Docker volume in config/deploy.yml.
 production:
   primary:
-    <<: *default
-    database: storage/production.sqlite3
+    adapter: postgresql
+    encoding: unicode
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+    database: <%= ENV["PG_DATABASE"] || "spendique" %>
+    username: <%= ENV["PG_USERNAME"] || "postgres" %>
+    password: <%= ENV["PG_PASSWORD"] || "" %>
+    host: <%= ENV["PG_HOST"] || "localhost" %>
+    port: <%= ENV["PG_PORT"] || 5432 %>
+
   cache:
     <<: *default
     database: storage/production_cache.sqlite3

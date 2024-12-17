@@ -193,6 +193,7 @@ GEM
       ast (~> 2.4.1)
       racc
     pg (1.5.9)
+    progressbar (1.13.0)
     psych (5.2.1)
       date
       stringio
@@ -354,6 +355,7 @@ DEPENDENCIES
   kamal
   kaminari
   pg
+  progressbar
   puma (>= 5.0)
   rack-cors
   rails (~> 8.0.0)

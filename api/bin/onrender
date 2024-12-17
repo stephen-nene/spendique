@@ -7,12 +7,12 @@ PORT=${PORT:-3000} # Default to 3000 if PORT is not set
 echo "Running bundle install"
 bundle install
 # Run database migration
-echo "Running db:migrate..."
-bundle exec rails db:migrate
+# echo "Running db:migrate..."
+# bundle exec rails db:migrate
 
 # Run seed if needed
-echo "Running db:seed..."
-bundle exec rails db:seed
+# echo "Running db:seed..."
+# bundle exec rails db:seed
 
 # Start Rails server on the specified port
 # echo "Starting Rails server on port $PORT..."

@@ -106,7 +106,7 @@ export default function FinanceCards({ financeData, dateToView, onDelete }) {
         >
           <span className="mr-4 capitalize">{type}s</span>
           <span className={`text-md font-medium ${bgColors.totalText}`}>
-            ${total.toFixed(2)}
+            Ksh {total.toFixed(2)}
           </span>
           {isOpen ? (
             <FcCollapse className="text-2xl fill-current ml-auto shrink-0" />
@@ -127,10 +127,10 @@ export default function FinanceCards({ financeData, dateToView, onDelete }) {
                     <h4 className="font-semibold">{finance.title}</h4>
                     <p>{finance.description}</p>
                     <p>
-                      <strong>Amount:</strong> ${finance.amount}
+                      <strong>Amount:</strong> Ksh {finance.amount}
                     </p>
                     <p>
-                      <strong>Transaction Cost:</strong> $
+                      <strong>Transaction Cost:</strong> Ksh{' '}
                       {finance.transaction_cost}
                     </p>
                     {finance.recurring && (
@@ -190,7 +190,7 @@ export default function FinanceCards({ financeData, dateToView, onDelete }) {
               Daily Summary
             </span>
             <span className="text-2xl font-semibold text-red-500">
-              $ {new Intl.NumberFormat().format(totalIncome - totalExpenses)}
+              Ksh {new Intl.NumberFormat().format(totalIncome - totalExpenses)}
             </span>
           </div>
         </>

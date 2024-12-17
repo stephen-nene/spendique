@@ -139,6 +139,7 @@ const handleSubmit = async (values) => {
           rules={[{ required: true, message: "Please enter a title" }]}
         >
           <Input
+            size="large"
             prefix={<FileTextOutlined className="text-gray-400" />}
             placeholder="Enter transaction title"
           />
@@ -154,10 +155,11 @@ const handleSubmit = async (values) => {
             className="flex-1"
           >
             <InputNumber
+              size="large"
               className="w-full"
               prefix={<DollarOutlined className="text-gray-400" />}
               formatter={(value) =>
-                `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                `Ksh ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
               }
               parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
             />
@@ -171,10 +173,11 @@ const handleSubmit = async (values) => {
             className="flex-1"
           >
             <InputNumber
-              className="w-full"
+              size="large"
+              className="w-1/2"
               prefix={<DollarOutlined className="text-gray-400" />}
               formatter={(value) =>
-                `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                `Ksh ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
               }
               parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
             />
@@ -189,7 +192,7 @@ const handleSubmit = async (values) => {
             { required: true, message: "Please select a transaction type" },
           ]}
         >
-          <Select placeholder="Select transaction type">
+          <Select size="large" placeholder="Select transaction type">
             <Option key={0} value={0}>
               Income
             </Option>
@@ -206,6 +209,7 @@ const handleSubmit = async (values) => {
           rules={[{ required: true, message: "Please select a category" }]}
         >
           <Select
+            size="large"
             prefix={<TagOutlined className="text-gray-400" />}
             showSearch
             style={{ width: "100%" }}

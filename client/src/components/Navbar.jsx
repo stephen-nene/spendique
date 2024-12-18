@@ -80,12 +80,12 @@ export const Navbar = () => {
   const ThemeToggleIcon = darkMode ? FaSun : FaMoon;
   const themeIconProps = {
     onClick: toggleDarkMode,
-    className: `icon ${darkMode ? 'text-yellow-400' : 'text-gray-600'}`,
+    className: `icon dark:text-yellow-400 text-gray-600`,
     size: 24
   };
 
   return (
-    <div className={`${darkMode ? "dark" : ""}`}>
+    <div className={``}>
       <header className="navbar bg-sky-100">
         <nav className="container">
           <div className="navbar-wrapper">

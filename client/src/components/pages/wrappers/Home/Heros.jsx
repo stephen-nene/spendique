@@ -54,22 +54,19 @@ export default function Heros() {
             your financial goals.
           </p>
           <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4 justify-center">
-  <Link
-    to="/register"
-    className="px-6 py-3 text-base font-semibold text-white bg-sky-500 rounded-full hover:bg-opacity-80 transition-transform duration-300 transform hover:scale-105 focus:ring-2 focus:ring-sky-500 focus:outline-none focus:ring-opacity-50"
-  >
-    Get Started
-  </Link>
-  <Link
-    to="/finances"
-    className="px-6 py-3 text-base font-semibold text-sky-600 border border-sky-500 rounded-full hover:text-white hover:bg-sky-500 transition-transform duration-300 transform hover:scale-105 focus:ring-2 focus:ring-sky-500 focus:outline-none focus:ring-opacity-50"
-  >
-    Start Now
-  </Link>
-</div>
-
-
-
+            <Link
+              to="/register"
+              className="px-6 py-3 text-base font-semibold text-white bg-sky-500 rounded-full hover:bg-opacity-80 transition-transform duration-300 transform hover:scale-105 focus:ring-2 focus:ring-sky-500 focus:outline-none focus:ring-opacity-50"
+            >
+              Get Started
+            </Link>
+            <Link
+              to="/finances"
+              className="px-6 py-3 text-base font-semibold text-sky-600 border border-sky-500 rounded-full hover:text-white hover:bg-sky-500 transition-transform duration-300 transform hover:scale-105 focus:ring-2 focus:ring-sky-500 focus:outline-none focus:ring-opacity-50"
+            >
+              Start Now
+            </Link>
+          </div>
         </div>
         <div className="md:h-[450px]">
           <img

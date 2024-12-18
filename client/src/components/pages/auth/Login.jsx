@@ -1,17 +1,9 @@
 import React, { useState } from "react";
-import {
-  Alert,
-  Button,
-  Checkbox,
-  Form,
-  Input,
-  Typography,
-  message,
-} from "antd";
-import { Link } from "react-router-dom";
-import { serverLogin } from "../../../helpers/auth";
-import { useNavigate } from "react-router-dom";
+import { Alert, Button, Checkbox, Form, Input, Typography } from "antd";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { serverLogin } from "../../../helpers/auth";
+
 export const Login = () => {
   const [loading, setLoading] = useState(false);
   const [serverMessage, setServerMessage] = useState("");
@@ -19,48 +11,34 @@ export const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
-const darkMode = useSelector((state) => state.app.darkMode)
 
   const onFinish = async (values) => {
     setLoading(true);
     setServerMessage("");
     setError("");
     try {
-      // console.log("Login attempt:", values);
       await serverLogin(values, navigate, dispatch);
-      setTimeout(()=>{},2000)
     } catch (error) {
       setError(error.response?.data?.error || "An unexpected error occurred.");
-      // console.error("Error during login:", error.response);
     } finally {
       setLoading(false);
     }
   };
 
-  const formStyles = darkMode
-    ? "bg-gray-800 border-gray-700 text-white"
-    : "bg-white border-gray-300 text-gray-800";
-
-  const textColor = darkMode ? "text-white" : "text-gray-800";
-  const linkColor = darkMode
-    ? "text-blue-400 hover:text-blue-300"
-    : "text-blue-600 hover:text-blue-800";
-
   return (
-    <div
-      className={`min-h-screen  flex items-center justify-center transition-colors duration-300 ${
-        darkMode ? "bg-gray-900" : "b"
-      }`}
-    >
-      <div
-        className={`w-full max-w-md p-8 space-y-6 rounded-xl border shadow-lg ${formStyles}`}
-      >
-        <Typography.Title level={2}>
-          <p className={`text-center mb-2 ${textColor}`}>
-            {!userData ? "Welcome Back" : `Hello ${userData.role} ${userData?.username}`}
-          </p>
-        </Typography.Title>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
+      <div className="w-full max-w-md p-8 space-y-6 rounded-xl border shadow-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700">
+        <h1
+          className="text-3xl font-bold text-center text-gray-800 dark:text-white"
+        >
 
+          {!userData
+            ? "Welcome Back"
+            : `Hello ${userData.role} ${userData.username}`}
+        
+        </h1>
+
+        {/* Alert Messages */}
         {serverMessage && (
           <Alert
             message={serverMessage}
@@ -77,10 +55,10 @@ const darkMode = useSelector((state) => state.app.darkMode)
             showIcon
             className="mb-4"
             closable
-            closeIcon
           />
         )}
 
+        {/* Form */}
         <Form
           name="login"
           initialValues={{ remember_me: true }}
@@ -88,18 +66,7 @@ const darkMode = useSelector((state) => state.app.darkMode)
           autoComplete="off"
           layout="vertical"
         >
-          {/* Username Field */}
-          {/* <Form.Item
-            name="username"
-            rules={[{ required: true, message: "Please enter your username" }]}
-          >
-            <Input
-              placeholder="Username"
-              size="large"
-              className={`${darkMode ? "bg-gray-700 border-gray-600 " : ""}`}
-            />
-          </Form.Item> */}
-          {/* email field */}
+          {/* Email Field */}
           <Form.Item
             name="email"
             rules={[
@@ -112,9 +79,9 @@ const darkMode = useSelector((state) => state.app.darkMode)
           >
             <Input
               type="email"
-              placeholder="email"
+              placeholder="Email"
               size="large"
-              className={`${darkMode ? "bg-gray-700 border-gray-600 " : ""}`}
+              className="bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200"
             />
           </Form.Item>
 
@@ -126,18 +93,21 @@ const darkMode = useSelector((state) => state.app.darkMode)
             <Input.Password
               placeholder="Password"
               size="large"
-              className={`${
-                darkMode ? "bg-gray-700 border-gray-600 " : "text-black"
-              }`}
+              className="bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200"
             />
           </Form.Item>
 
           {/* Remember Me and Forgot Password */}
           <div className="flex justify-between items-center mb-4">
             <Form.Item name="remember_me" valuePropName="checked" noStyle>
-              <Checkbox className={textColor}>Remember me</Checkbox>
+              <Checkbox className="text-gray-800 dark:text-gray-200">
+                Remember me
+              </Checkbox>
             </Form.Item>
-            <Link className={linkColor} to="/forgot">
+            <Link
+              className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
+              to="/forgot"
+            >
               Forgot password?
             </Link>
           </div>
@@ -150,20 +120,21 @@ const darkMode = useSelector((state) => state.app.darkMode)
               loading={loading}
               block
               size="large"
-              className="bg-blue-600 hover:bg-blue-700 transition-colors duration-300"
+              className="bg-blue-600 hover:bg-blue-700 focus:ring focus:ring-blue-500 focus:ring-opacity-50 text-white transition-colors duration-300"
             >
-              Log in
+              {loading ? "Logging in..." : "Log in"}
             </Button>
           </Form.Item>
         </Form>
 
         {/* Sign Up Prompt */}
         <div className="text-center">
-          <Typography.Text
-            className={`${darkMode ? "text-gray-400" : "text-gray-600"}`}
-          >
-            Don't have an account?{" "}
-            <Link to="/register" className={linkColor}>
+          <Typography.Text className="text-gray-600 dark:text-gray-400">
+            Don’t have an account?{" "}
+            <Link
+              to="/register"
+              className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
+            >
               Sign up
             </Link>
           </Typography.Text>

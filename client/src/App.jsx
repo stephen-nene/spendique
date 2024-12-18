@@ -71,15 +71,13 @@ function App() {
 
   return (
     <>
-      <div className="flex flex-col ">
-        <Navbar darkMode={darkMode} />
-        <div
-          className={`pt-[65px] md:pt-[75px]  ${darkMode ? "bg-sky-950" : ""} min-h-screen `}
-        >
+      <div className={`${darkMode ? "dark" : ""} flex flex-col`}>
+        <Navbar />
+        <div className={`pt-[65px] md:pt-[75px]   min-h-screen `}>
           <Suspense fallback={<LoadingFallback />}>
             <Routes>
               {/* Public Routes */}
-              <Route path="/" element={<Home darkMode={darkMode} />} />
+              <Route path="/" element={<Home />} />
               <Route path="/login" element={<AuthRoutes.Login />} />
               <Route path="/register" element={<AuthRoutes.Register />} />
               <Route path="/forgot" element={<AuthRoutes.Forgot />} />
@@ -101,9 +99,11 @@ function App() {
               />
               <Route
                 path="/finances/new"
-                element={renderProtectedRoute(["admin", "user"], rotectedRoutes.NewFinance)}
+                element={renderProtectedRoute(
+                  ["admin", "user"],
+                  rotectedRoutes.NewFinance
+                )}
               />
-
 
               {/* Dashboard Routes */}
               <Route path="/dash">

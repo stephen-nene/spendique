@@ -3,7 +3,7 @@ import { Button, Form, Input, Typography, Alert } from "antd";
 import { Link } from "react-router-dom";
 import { serverForgotPass } from "../../../helpers/auth";
 
-export const Forgot = ({ darkMode = false }) => {
+export const Forgot = () => {
   const [loading, setLoading] = useState(false);
   const [serverMessage, setServerMessage] = useState("");
   const [error, setError] = useState("");
@@ -13,9 +13,7 @@ export const Forgot = ({ darkMode = false }) => {
     setServerMessage("");
     setError("");
     try {
-      // Call the server to send the reset link
       const response = await serverForgotPass(values.email);
-      console.log("Password reset request:", response);
       setServerMessage(response?.message || "Password reset link sent!");
     } catch (err) {
       const errorMessage =
@@ -26,25 +24,13 @@ export const Forgot = ({ darkMode = false }) => {
     }
   };
 
-  const formStyles = darkMode
-    ? "bg-gray-800 border-gray-700 text-white"
-    : "bg-white border-gray-300 text-gray-800";
-
-  const textColor = darkMode ? "text-white" : "text-gray-800";
-  const linkColor = darkMode
-    ? "text-blue-400 hover:text-blue-300"
-    : "text-blue-600 hover:text-blue-800";
-
   return (
-    <div
-      className={`min-h-screen flex items-center justify-center transition-colors duration-300 ${
-        darkMode ? "bg-gray-900" : "bg-gray-100"
-      }`}
-    >
-      <div
-        className={`w-full max-w-md p-8 space-y-6 rounded-xl border shadow-lg ${formStyles}`}
-      >
-        <Typography.Title level={2} className={`text-center mb-6 ${textColor}`}>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
+      <div className="w-full max-w-md p-8 space-y-6 rounded-xl border shadow-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700">
+        <Typography.Title
+          level={2}
+          className="text-center text-gray-800 dark:text-white"
+        >
           Forgot Password
         </Typography.Title>
 
@@ -58,14 +44,10 @@ export const Forgot = ({ darkMode = false }) => {
           />
         )}
         {error && (
-          <Alert
-            message={error}
-            type="error"
-            showIcon
-            className="mb-4"
-          />
+          <Alert message={error} type="error" showIcon className="mb-4" />
         )}
 
+        {/* Form */}
         <Form
           name="forgot-password"
           onFinish={onFinish}
@@ -84,9 +66,9 @@ export const Forgot = ({ darkMode = false }) => {
             ]}
           >
             <Input
-              placeholder="Email Address"
+              placeholder="Enter your email"
               size="large"
-              className={`${darkMode ? "bg-gray-700 border-gray-600 " : ""}`}
+              className="bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200"
             />
           </Form.Item>
 
@@ -98,20 +80,21 @@ export const Forgot = ({ darkMode = false }) => {
               loading={loading}
               block
               size="large"
-              className="bg-blue-600 hover:bg-blue-700 transition-colors duration-300"
+              className="bg-blue-600 hover:bg-blue-700 focus:ring focus:ring-blue-500 focus:ring-opacity-50 text-white transition-colors duration-300"
             >
-              Send Reset Link
+              {loading ? "Sending..." : "Send Reset Link"}
             </Button>
           </Form.Item>
         </Form>
 
         {/* Back to Login Prompt */}
         <div className="text-center">
-          <Typography.Text
-            className={`${darkMode ? "text-gray-400" : "text-gray-600"}`}
-          >
+          <Typography.Text className="text-gray-600 dark:text-gray-400">
             Remember your password?{" "}
-            <Link to="/login" className={linkColor}>
+            <Link
+              to="/login"
+              className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
+            >
               Log in
             </Link>
           </Typography.Text>

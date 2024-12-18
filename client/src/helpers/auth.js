@@ -76,7 +76,7 @@ export const serverSignup = async (values, navigate,dispatch) => {
     if (response.status === 201) {
       loadingMessage();
       showMessage("success", response?.data?.message, 3);
-      navigate("/login");
+      // navigate("/login");
       dispatch(signupAction(response.data.user));
       return response.data;
     }

@@ -69,24 +69,19 @@ const NewFinance = () => {
       console.error("Error adding category:", error);
     }
   };
-  const transactionTypes = [
-    { id: 1, name: "Income" },
-    { id: 2, name: "Expense" },
-  ];
-
 
 
 const handleSubmit = async (values) => {
   const financeEntry = {
     finance: {
       ...values,
-      transaction_type: parseInt(values.transaction_type, 10), // Ensure it's an integer
+      transaction_type: parseInt(values.transaction_type, 10), 
     },
   };
 
-  // console.log("Finance Entry:", financeEntry);
-
+  
   try {
+    // console.log("Finance Entry:", financeEntry);
     const res = await apiClient.post("/finances", financeEntry);
     if (res.status === 201) {
       navigate('/finances')
@@ -105,7 +100,6 @@ const handleSubmit = async (values) => {
 
   return (
     <div className="container mx-auto px-4 py-6">
-      {/* Updated Breadcrumb with items prop */}
       <Breadcrumb
         items={[
           {
@@ -158,10 +152,10 @@ const handleSubmit = async (values) => {
               size="large"
               className="w-full"
               prefix={<DollarOutlined className="text-gray-400" />}
-              formatter={
-                (value) => `KSh ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",") // Replaced $ with KSh
+              formatter={(value) =>
+                `KSh ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
               }
-              parser={(value) => value.replace(/KSh\s?|(,*)/g, "")} // Replaced $ with KSh
+              parser={(value) => value.replace(/KSh\s?|(,*)/g, "")}
             />
           </Form.Item>
 
@@ -204,16 +198,19 @@ const handleSubmit = async (values) => {
 
         {/* Category */}
         <Form.Item
-          name="category_id"
-          label="Category"
-          rules={[{ required: true, message: "Please select a category" }]}
+          name="categories"
+          label="Categories"
+          rules={[
+            { required: true, message: "Please select at least one category" },
+          ]}
         >
           <Select
+            mode="multiple"
             size="large"
             prefix={<TagOutlined className="text-gray-400" />}
             showSearch
             style={{ width: "100%" }}
-            placeholder="Select or create a category"
+            placeholder="Select or create categories"
             filterOption={(input, option) =>
               option?.label.toLowerCase().includes(input.toLowerCase())
             }
@@ -267,7 +264,12 @@ const handleSubmit = async (values) => {
 
         {/* Submit Button */}
         <Form.Item>
-          <Button type="primary" htmlType="submit" className="w-full mt-4">
+          <Button
+            size="large"
+            type="primary"
+            htmlType="submit"
+            className="w-full mt-4"
+          >
             Create Finance Entry
           </Button>
         </Form.Item>

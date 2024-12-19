@@ -1,134 +1,260 @@
-import React from "react";
-import { useSelector,useDispatch } from "react-redux";
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { serverLogout } from "../../helpers/auth";
+import { CiLogout, CiSaveDown2 } from "react-icons/ci";
+import { FaPencilAlt } from "react-icons/fa";
 
 export const Profiles = () => {
   const user = useSelector((state) => state.user.userData);
-  const darkMode = useSelector((state) => state.app.darkMode);
-  const [edit, setEdit] = React.useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // Initial state for form data
+  const [formData, setFormData] = useState({
+    first_name: user?.first_name || "",
+    middle_name: user?.middle_name || "",
+    last_name: user?.last_name || "",
+    username: user?.username || "",
+    email: user?.email || "",
+    phonenumber: user?.phonenumber || "",
+    street: user?.addresses?.[0]?.street || "",
+    city: user?.addresses?.[0]?.city || "",
+    state: user?.addresses?.[0]?.state || "",
+    country: user?.addresses?.[0]?.country || "",
+    role: user?.role || "",
+    salary: user?.salary || "",
+  });
+
+  const [isEditing, setIsEditing] = useState(false);
+
+  // Handling input changes
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // Handle form submission
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Updated Profile Data:", formData);
+    setIsEditing(false);
+  };
+
   // Checking if the user data is available
   if (!user) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="text-xl">Loading...</div>
+      </div>
+    );
   }
 
-  const {
-    first_name,
-    middle_name,
-    last_name,
-    username,
-    email,
-    phonenumber,
-    addresses,
-    profile_pic,
-    role,
-  } = user;
-
-  const { street = "", city = "", state = "", country = "" } =
-  (addresses && addresses[0]) || {};
-
-  // Dark mode classes
-  const bgColor = darkMode ? "bg-gray-900" : "bg-blue-500";
-  const containerBg = darkMode ? "bg-gray-800" : "bg-gray-100";
-  const textColor = darkMode ? "text-gray-200" : "text-gray-600";
-  const inputBg = darkMode ? "bg-gray-700 border-gray-600 text-gray-200" : "bg-white border-gray-300 text-gray-700";
-  const headerBg = darkMode ? "bg-gray-700" : "bg-gray-300";
-  const buttonBg = darkMode ? "bg-purple-500 hover:bg-purple-600" : "bg-pink-500 hover:bg-pink-600";
-
   return (
-    <div className={`py-6 min-h-screen `}>
-      <section className=" container mx-auto px-4">
-        <div className={`${containerBg} shadow-lg rounded-lg overflow-hidden`}>
-          <div className={`${headerBg} px-6 py-4 flex justify-between items-center`}>
-            <h1 className={`text-xl font-bold ${darkMode ? "text-purple-300" : "text-blue-700"}`}>My Account</h1>
-            <button
-              className={`${buttonBg} text-white font-bold uppercase text-xs px-4 py-2 rounded shadow focus:outline-none transition-all`}
-              onClick={() => setEdit(!edit)}
-            >
-              {edit ? "View" : "Edit"}
-            </button>
-          </div>
-          <div className="p-6">
-            <h2 className={`${textColor} text-sm font-bold uppercase mb-4`}>User Information</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {[
-                { label: "First Name", value: first_name },
-                { label: "Middle Name", value: middle_name },
-                { label: "Last Name", value: last_name },
-                { label: "Username", value: username },
-                { label: "Email", value: email },
-                { label: "Phone Number", value: phonenumber },
-                { label: "Role", value: role },
-              ].map((field, index) => (
-                <div key={index}>
-                  <label className={`block text-xs font-bold uppercase mb-2 ${textColor}`}>
-                    {field.label}
-                  </label>
-                  <input
-                    type="text"
-                    className={`border rounded px-3 py-2 w-full text-sm focus:ring focus:outline-none ${inputBg}`}
-                    value={field.value || ""}
-                    readOnly={!edit}
-                  />
+    <div className="py-8 min-h-screen bg-gray-100 dark:bg-gray-900">
+      <div className="container mx-auto px-4 max-w-4xl">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white dark:bg-gray-800 shadow-2xl rounded-2xl overflow-hidden"
+        >
+          {/* Header */}
+          <div className="bg-gray-200 dark:bg-gray-700 px-6 py-4 flex justify-between items-center">
+            <h1 className="text-2xl font-bold text-blue-800 dark:text-purple-300">
+              My Profile
+            </h1>
+            <div className="flex items-center space-x-4">
+              {!isEditing ? (
+                <button
+                  type="button"
+                  onClick={() => setIsEditing(true)}
+                  className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
+                >
+                  <FaPencilAlt size={18} />
+                  <span>Edit Profile</span>
+                </button>
+              ) : (
+                <div className="flex space-x-4">
+                  <button
+                    type="button"
+                    onClick={() => setIsEditing(false)}
+                    className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="flex items-center space-x-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors"
+                  >
+                    <CiSaveDown2 size={18} />
+                    <span>Save Changes</span>
+                  </button>
                 </div>
-              ))}
+              )}
             </div>
+          </div>
 
-            <div className="mt-6">
-              <h2 className={`${textColor} text-sm font-bold uppercase mb-4`}>Address</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Profile Content */}
+          <div className="p-6 space-y-6">
+            {/* Personal Information Section */}
+            <section>
+              <h2 className="text-lg font-semibold mb-4 text-gray-700 dark:text-gray-300">
+                Personal Information
+              </h2>
+              <div className="grid md:grid-cols-3 gap-4">
                 {[
-                  { label: "Street", value: street },
-                  { label: "City", value: city },
-                  { label: "State", value: state },
-                  { label: "Country", value: country },
-                ].map((field, index) => (
-                  <div key={index}>
-                    <label className={`block text-xs font-bold uppercase mb-2 ${textColor}`}>
+                  {
+                    name: "first_name",
+                    label: "First Name",
+                    type: "text",
+                  },
+                  {
+                    name: "middle_name",
+                    label: "Middle Name",
+                    type: "text",
+                  },
+                  {
+                    name: "last_name",
+                    label: "Last Name",
+                    type: "text",
+                  },
+                ].map((field) => (
+                  <div key={field.name}>
+                    <label
+                      htmlFor={field.name}
+                      className="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-400"
+                    >
                       {field.label}
                     </label>
                     <input
-                      type="text"
-                      className={`border rounded px-3 py-2 w-full text-sm focus:ring focus:outline-none ${inputBg}`}
-                      value={field.value || ""}
-                      readOnly={!edit}
+                      type={field.type}
+                      id={field.name}
+                      name={field.name}
+                      value={formData[field.name]}
+                      onChange={handleInputChange}
+                      disabled={!isEditing}
+                      className={`w-full px-3 py-2 rounded-lg ${
+                        isEditing
+                          ? "bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200"
+                          : "bg-gray-200 dark:bg-gray-800 text-gray-500 dark:text-gray-500"
+                      } transition-colors duration-200`}
                     />
                   </div>
                 ))}
               </div>
-            </div>
+            </section>
 
-            <div className="mt-6">
-              <label className={`block text-xs font-bold uppercase mb-2 ${textColor}`}>
+            {/* Role and Salary */}
+            <section>
+              <h2 className="text-lg font-semibold mb-4 text-gray-700 dark:text-gray-300">
+                Role and Salary
+              </h2>
+              <div className="grid md:grid-cols-2 gap-4">
+                {[
+                  {
+                    name: "role",
+                    label: "Role",
+                    type: "text",
+                    editable: false, 
+                  },
+                  {
+                    name: "salary",
+                    label: "Salary",
+                    type: "number",
+                    editable: true, 
+                  },
+                ].map((field) => (
+                  <div key={field.name}>
+                    <label
+                      htmlFor={field.name}
+                      className="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-400"
+                    >
+                      {field.label}
+                    </label>
+                    <input
+                      type={field.type}
+                      id={field.name}
+                      name={field.name}
+                      value={formData[field.name]}
+                      onChange={handleInputChange}
+                      disabled={!isEditing || !field.editable}
+                      className={`w-full px-3 py-2 rounded-lg ${
+                        isEditing
+                          ? "bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200"
+                          : "bg-gray-200 dark:bg-gray-800 text-gray-500 dark:text-gray-500"
+                      } transition-colors duration-200`}
+                    />
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* Contact Information Section */}
+            <section>
+              <h2 className="text-lg font-semibold mb-4 text-gray-700 dark:text-gray-300">
+                Contact Information
+              </h2>
+              <div className="grid md:grid-cols-3 gap-4">
+                {[
+                  { name: "email", label: "Email", type: "email" },
+                  { name: "phonenumber", label: "Phone Number", type: "tel" },
+                  { name: "username", label: "Username", type: "text" },
+                ].map((field) => (
+                  <div key={field.name}>
+                    <label
+                      htmlFor={field.name}
+                      className="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-400"
+                    >
+                      {field.label}
+                    </label>
+                    <input
+                      type={field.type}
+                      id={field.name}
+                      name={field.name}
+                      value={formData[field.name]}
+                      onChange={handleInputChange}
+                      disabled={!isEditing}
+                      className={`w-full px-3 py-2 rounded-lg ${
+                        isEditing
+                          ? "bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200"
+                          : "bg-gray-200 dark:bg-gray-800 text-gray-500 dark:text-gray-500"
+                      } transition-colors duration-200`}
+                    />
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* Profile Picture */}
+            <section className="flex flex-col items-center">
+              <h2 className="text-lg font-semibold mb-4 text-gray-700 dark:text-gray-300">
                 Profile Picture
-              </label>
+              </h2>
               <img
-                src={profile_pic || "https://via.placeholder.com/150"}
-                alt="Profile Pic"
-                className="w-32 h-32 object-cover rounded-full mx-auto"
+                src={user.profile_pic || "https://via.placeholder.com/150"}
+                alt="Profile"
+                className="w-40 h-40 rounded-full object-cover shadow-lg"
               />
-            </div>
+            </section>
 
-            <div className="mt-6 text-center">
+            {/* Logout Button */}
+            <div className="flex justify-center mt-6">
               <button
-                className={`bg-red-500 text-white font-bold uppercase text-xs px-4 py-2 rounded shadow hover:bg-red-600 focus:outline-none transition-all`}
                 type="button"
-                onClick={()=>serverLogout(dispatch,navigate)}
+                onClick={() => serverLogout(dispatch, navigate)}
+                className="flex items-center space-x-2 bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg transition-colors"
               >
-                Logout
+                <CiLogout size={20} />
+                <span>Logout</span>
               </button>
-              {edit && (
-                <button
-                  className={`ml-4 bg-green-500 text-white font-bold uppercase text-xs px-4 py-2 rounded shadow hover:bg-blue-600 focus:outline-none transition-all`}
-                  type="submit"
-                >Update Changes</button>)}
             </div>
           </div>
-        </div>
-      </section>
-     </div>
+        </form>
+      </div>
+    </div>
   );
 };
+
+export default Profiles;

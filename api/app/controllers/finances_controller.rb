@@ -6,12 +6,12 @@ class FinancesController < ApplicationController
   def index
     if session[:user_id]
       user = User.find_by(id: session[:user_id])
-  
+
       if user.nil?
         render json: { error: "Unauthorized: User not found" }, status: :unauthorized and return
       end
-  
-      if params[:only_my_records] == 'true'
+
+      if params[:only_my_records] == "true"
         # Fetch records only associated with the logged-in user
         @finances = user.finances.order(created_at: :desc).page(params[:page])
       elsif user.admin?
@@ -21,16 +21,15 @@ class FinancesController < ApplicationController
         # Fetch records only associated with the user
         @finances = user.finances.order(created_at: :desc).page(params[:page])
       end
-  
-      render json: { 
+
+      render json: {
         finances: serialize_collection(@finances, FinanceSerializer),
-        meta: pagination_meta(@finances) 
+        meta: pagination_meta(@finances),
       }
     else
       render json: { error: "Unauthorized: No session cookie" }, status: :unauthorized
     end
   end
-  
 
   # GET /finances/1
   def show
@@ -40,9 +39,12 @@ class FinancesController < ApplicationController
   # POST /finances
   def create
     finance_params_with_user = finance_params.merge(user_id: finance_params[:user_id] || session[:user_id])
+    category_ids = finance_params[:categories] || []
 
-    # Create a new finance entry
-    @finance = Finance.new(finance_params_with_user)
+    categories = Category.where(id: category_ids)
+
+    @finance = Finance.new(finance_params_with_user.except(:categories))
+    @finance.categories = categories
 
     if @finance.save
       render json: @finance, status: :created, location: @finance
@@ -77,7 +79,7 @@ class FinancesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def finance_params
-    params.expect(finance: [:user_id, :title, :transaction_cost, :description,:transaction_type, :amount, recurring: {}])
+    params.expect(finance: [:user_id, :title, :transaction_cost, :description, :transaction_type, :amount, recurring: {}, categories: []])
   end
 
   # def pagination_meta(finances)

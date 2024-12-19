@@ -1,6 +1,6 @@
 class FinanceSerializer < ActiveModel::Serializer
   attributes :id, :title, :transaction_cost, :description, :transaction_type, :amount, :recurring, :created_at, :updated_at
-  has_one :user,  if: :include_associations?
+  # has_one :user,  if: :include_associations?
   has_many :categories, if: :include_associations?
 
   def include_associations?

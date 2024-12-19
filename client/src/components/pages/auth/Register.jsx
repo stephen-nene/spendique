@@ -9,7 +9,7 @@ import {
   Col,
   Select,
 } from "antd";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { serverSignup } from "../../../helpers/auth";
 import { useDispatch } from "react-redux";
 
@@ -17,15 +17,13 @@ export const Register = ({ darkMode = false }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
+
   const onFinish = async (values) => {
     setLoading(true);
 
     try {
-
-
       // console.log("Registration data:", { user: { ...values } });
-      await serverSignup({ user: { ...values } },navigate,dispatch);
+      await serverSignup({ user: { ...values } }, navigate, dispatch);
     } catch (error) {
       const errorMessage = Array.isArray(error?.response?.data?.errors)
         ? error.response.data.errors.join(", ")
@@ -168,10 +166,6 @@ export const Register = ({ darkMode = false }) => {
             name="phonenumber"
             rules={[
               {
-                required: true,
-                message: "Phone number is required",
-              },
-              {
                 pattern: /^[0-9]{10}$/,
                 message: "Phone number must be 10 digits",
               },
@@ -182,7 +176,16 @@ export const Register = ({ darkMode = false }) => {
               placeholder="Phone Number"
               size="large"
               className={formStyles.input}
+              maxLength={10}
               // max={10}
+            />
+          </Form.Item>
+          <Form.Item name="salary">
+            <Input
+              placeholder="optional salary "
+              size="large"
+              className={formStyles.input}
+              maxLength={10}
             />
           </Form.Item>
 

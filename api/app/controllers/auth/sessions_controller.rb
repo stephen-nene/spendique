@@ -122,7 +122,7 @@ module Auth
 
     def user_params
       params.require(:user).permit(
-        :first_name, :middle_name, :last_name, :email, :username, :profile_pic, :password, :password_confirmation, :phonenumber,
+        :first_name, :middle_name, :last_name, :email, :username, :profile_pic, :password, :password_confirmation, :salary, :phonenumber,
         addresses: {},
       )
     end

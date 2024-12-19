@@ -71,9 +71,9 @@ function App() {
 
   return (
     <>
-      <div className={`${darkMode ? "dark" : ""} flex flex-col`}>
+      <div className={`${darkMode ? "dark" : ""} flex flex-col `}>
         <Navbar />
-        <div className={`pt-[65px] md:pt-[75px]   min-h-screen `}>
+        <div className="bg-[#fbeeffd2] dark:bg-[#120516] dark:text-white min-h-screen pt-20 md:pt-[100px]  mt -20">
           <Suspense fallback={<LoadingFallback />}>
             <Routes>
               {/* Public Routes */}

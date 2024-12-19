@@ -35,9 +35,14 @@ module Scholarships
     # Add middleware for cookies and session management
     config.middleware.use ActionDispatch::Cookies
     # config.middleware.use ActionDispatch::Session::CookieStore, key: "auth-session", same_site: :lax, secure: false
-    config.middleware.use ActionDispatch::Session::CookieStore, key: "auth-session", same_site: :none, secure: true
+    config.middleware.use ActionDispatch::Session::CookieStore, {
+                            key: "auth-session",
+                            same_site: Rails.env.production? ? :none : :lax,
+                            secure: Rails.env.production?, 
+                          }
 
-    config.action_dispatch.cookies_same_site_protection = :None
+    # Set cookies same-site protection dynamically
+    config.action_dispatch.cookies_same_site_protection = Rails.env.production? ? :none : :lax
 
     config.middleware.insert_before 0, Rack::Cors
 

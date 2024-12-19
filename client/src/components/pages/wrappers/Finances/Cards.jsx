@@ -96,7 +96,7 @@ export default function FinanceCards({ financeData, dateToView, onDelete }) {
 
     return (
       <div
-        className={`rounded-lg ${bgColors.main} transition-all`}
+        className={`dark:text-black rounded-lg ${bgColors.main} transition-all`}
         role="accordion"
       >
         <button
@@ -186,7 +186,7 @@ export default function FinanceCards({ financeData, dateToView, onDelete }) {
           {renderFinanceSection("expense", expenses, totalExpenses)}
 
           <div className="flex items-center justify-between p-6">
-            <span className="text-lg font-extrabold text-gray-800">
+            <span className="text-lg font-extrabold text-gray-80">
               Daily Summary
             </span>
             <span className="text-2xl font-semibold text-red-500">

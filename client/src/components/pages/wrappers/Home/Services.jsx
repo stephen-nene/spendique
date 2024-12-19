@@ -11,7 +11,7 @@ import {
 export default function Services() {
   return (
     <div className="bg-b max-w-6xl mx-auto font-[sans-serif]">
-      <h2 className="text-gray-800 sm:text-4xl text-2xl font-extrabold text-center mb-16">
+      <h2 className="text-gray-800 dark:text-[#CAD5CA] sm:text-4xl text-2xl font-extrabold text-center mb-16">
         Discover Our Exclusive Features
       </h2>
 
@@ -20,9 +20,7 @@ export default function Services() {
           <FcEngineering className="text-5xl bg-blue-100 p-2 rounded-lg shrink-0" />
 
           <div>
-            <h3 className="text-gray-800 text-xl font-semibold mb-3">
-              Customization
-            </h3>
+            <h3 className=" text-xl font-semibold mb-3">Customization</h3>
             <p className="text-gray-600 text-sm">
               Tailor our product to suit your needs Expand your reach with our
               global network.
@@ -34,9 +32,7 @@ export default function Services() {
           <FcGenealogy className="text-5xl bg-blue-100 p-2 rounded-lg shrink-0" />
 
           <div>
-            <h3 className="text-gray-800 text-xl font-semibold mb-3">
-              Security
-            </h3>
+            <h3 className=" text-xl font-semibold mb-3">Security</h3>
             <p className="text-gray-600 text-sm">
               Your data is protected by the latest security measures.
             </p>
@@ -47,9 +43,7 @@ export default function Services() {
           <FcWorkflow className="text-5xl bg-blue-100 p-2 rounded-lg shrink-0" />
 
           <div>
-            <h3 className="text-gray-800 text-xl font-semibold mb-3">
-              Support
-            </h3>
+            <h3 className=" text-xl font-semibold mb-3">Support</h3>
             <p className="text-gray-600 text-sm">
               Tailor our product to suit your needs 24/7 customer support for
               all your inquiries.
@@ -61,9 +55,7 @@ export default function Services() {
           <FcSettings className="text-5xl bg-blue-100 p-2 rounded-lg shrink-0" />
 
           <div>
-            <h3 className="text-gray-800 text-xl font-semibold mb-3">
-              Performance
-            </h3>
+            <h3 className=" text-xl font-semibold mb-3">Performance</h3>
             <p className="text-gray-600 text-sm">
               Experience blazing-fast performance with our product.
             </p>
@@ -74,9 +66,7 @@ export default function Services() {
           <FcTabletAndroid className="text-5xl bg-blue-100 p-2 rounded-lg shrink-0" />
 
           <div>
-            <h3 className="text-gray-800 text-xl font-semibold mb-3">
-              Global Reach
-            </h3>
+            <h3 className=" text-xl font-semibold mb-3">Global Reach</h3>
             <p className="text-gray-600 text-sm">
               Tailor our product to suit your needs Expand your reach with our
               global network.
@@ -88,9 +78,7 @@ export default function Services() {
           <FcHeatMap className="text-5xl bg-blue-100 p-2 rounded-lg shrink-0" />
 
           <div>
-            <h3 className="text-gray-800 text-xl font-semibold mb-3">
-              Communication
-            </h3>
+            <h3 className=" text-xl font-semibold mb-3">Communication</h3>
             <p className="text-gray-600 text-sm">
               Tailor our product to suit your needs Seamless communication for
               your team.

@@ -54,7 +54,7 @@ export const Profiles = () => {
   }
 
   return (
-    <div className="py-8 min-h-screen bg-gray-100 dark:bg-gray-900">
+    <div className="p-8 min-h-screen ">
       <div className="container mx-auto px-4 max-w-4xl">
         <form
           onSubmit={handleSubmit}

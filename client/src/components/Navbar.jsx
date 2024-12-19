@@ -85,52 +85,52 @@ export const Navbar = () => {
   };
 
   return (
-    <div className={``}>
-      <header className="navbar bg-sky-100">
-        <nav className="container">
-          <div className="navbar-wrapper">
-            <NavLink className="text-2xl font-bold" to="/">
-              SpendIQue
-            </NavLink>
+    // <div className={``}>
+    <header className="navbar bg-sky-500 dark:bg-sky-900  dark:bg -[#1f2c31]">
+      <nav className="container">
+        <div className="navbar-wrapper">
+          <NavLink className="text-2xl font-bold" to="/">
+            SpendIQue
+          </NavLink>
 
-            {/* Desktop Menu */}
-            <div className="hidden md:flex items-center gap-4">
-              <MenuItems userData={userData} isDashRoute={isDashRoute} />
-            </div>
+          {/* Desktop Menu */}
+          <div className="hidden md:flex items-center gap-4">
+            <MenuItems userData={userData} isDashRoute={isDashRoute} />
+          </div>
 
-            {/* Right Icons */}
-            <div className="flex items-center gap-4">
-              {userData && (
-                <Link to="/profile">
-                  <FaUser className="icon text-gray-600" size={24} />
-                </Link>
+          {/* Right Icons */}
+          <div className="flex items-center gap-4">
+            {userData && (
+              <Link to="/profile">
+                <FaUser className="icon text-gray-600" size={24} />
+              </Link>
+            )}
+
+            <ThemeToggleIcon {...themeIconProps} />
+
+            {/* Mobile Menu Toggle */}
+            <div className="md:hidden cursor-pointer">
+              {isMenuOpen ? (
+                <VscChromeClose onClick={toggleMenu} size={25} />
+              ) : (
+                <FaBars onClick={toggleMenu} size={25} />
               )}
-              
-              <ThemeToggleIcon {...themeIconProps} />
-
-              {/* Mobile Menu Toggle */}
-              <div className="md:hidden cursor-pointer">
-                {isMenuOpen ? (
-                  <VscChromeClose onClick={toggleMenu} size={25} />
-                ) : (
-                  <FaBars onClick={toggleMenu} size={25} />
-                )}
-              </div>
             </div>
           </div>
-        </nav>
+        </div>
+      </nav>
 
-        {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="md:hidden mobile-menu">
-            <MenuItems 
-              onClick={toggleMenu} 
-              userData={userData} 
-              isDashRoute={isDashRoute} 
-            />
-          </div>
-        )}
-      </header>
-    </div>
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <div className="md:hidden mobile-menu">
+          <MenuItems
+            onClick={toggleMenu}
+            userData={userData}
+            isDashRoute={isDashRoute}
+          />
+        </div>
+      )}
+    </header>
+    // </div>
   );
 };

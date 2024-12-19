@@ -72,23 +72,33 @@ export default function Pricings() {
   };
 
   return (
-    <div className="font-[sans-serif] bg-gray-100 px-4 py-8">
+    <div className="font-[sans-serif]  px-4 py-8">
       <div className="max-w-5xl max-lg:max-w-3xl mx-auto">
         <div className="text-center">
-          <h2 className="text-3xl font-bold mb-2 text-gray-800">Choose a Subscription</h2>
-          <p className="text-sm text-gray-500">Choose a plan that fits your financial needs</p>
+          <h2 className="text-3xl font-bold mb-2 ">Choose a Subscription</h2>
+          <p className="text-sm text-gray-500">
+            Choose a plan that fits your financial needs
+          </p>
         </div>
 
-        <div className="flex mx-auto bg-white rounded-full max-w-[300px] p-1 mt-6">
-          <button 
+        <div className="flex mx-auto bg-white dark:bg-slate-500 rounded-full max-w-[300px] p-1 mt-6">
+          <button
             onClick={togglePricing}
-            className={`w-full text-sm py-2 px-4 tracking-wide rounded-full ${!isYearly ? "bg-purple-600 text-white" : "bg-transparent text-gray-800"}`}
+            className={`w-full text-sm py-2 px-4 tracking-wide rounded-full ${
+              !isYearly
+                ? "bg-purple-600 text-white"
+                : "bg-transparent text-gray-800"
+            }`}
           >
             Monthly
           </button>
-          <button 
+          <button
             onClick={togglePricing}
-            className={`w-full text-sm py-2 px-4 tracking-wide rounded-full ${isYearly ? "bg-purple-600 text-white" : "bg-transparent text-gray-800"}`}
+            className={`w-full text-sm py-2 px-4 tracking-wide rounded-full ${
+              isYearly
+                ? "bg-purple-600 text-white"
+                : "bg-transparent text-gray-800"
+            }`}
           >
             Yearly
           </button>
@@ -98,11 +108,14 @@ export default function Pricings() {
           {pricingData.map((plan, index) => {
             const planDetails = isYearly ? plan.yearly : plan.monthly;
             return (
-              <div key={index} className="bg-white shadow rounded-3xl p-6 hover:scale-105 transition-all duration-300">
+              <div
+                key={index}
+                className="bg-white dark:bg-slate-500 shadow rounded-3xl p-6 hover:scale-105 transition-all duration-300"
+              >
                 <h4 className="text-gray-800 text-lg mb-3">{plan.name}</h4>
                 <h3 className="text-4xl font-semibold ">
                   ${planDetails.price.toFixed(2)}
-                  <sub className="text-gray-500 font-medium text-sm ml-1">
+                  <sub className="text-gray -500 font-medium text-sm ml-1">
                     / {isYearly ? "year" : "month"}
                   </sub>
                 </h3>
@@ -111,29 +124,36 @@ export default function Pricings() {
 
                 <div>
                   <ul className="space-y-4">
-                    <li className="flex items-center text-sm text-gray-500">
-                      <FcOk className="text-2xl mr-3 bg-sky-100  rounded-full p-[3px]" />
+                    <li className="flex items-center text-sm text-gr ay-500">
+                      <FcOk className="text-2xl mr-3  rounded-full p-[3px]" />
                       {planDetails.transactions} Transactions
                     </li>
-                    <li className="flex items-center text-sm text-gray-500">
-                      <FcOk className="text-2xl mr-3 bg-sky-100  rounded-full p-[3px]" />
+                    <li className="flex items-center text-sm ">
+                      <FcOk className="text-2xl mr-3  rounded-full p-[3px]" />
                       {planDetails.reportGeneration} Report Generation
                     </li>
-                    <li className="flex items-center text-sm text-gray-500">
-                      <FcOk className="text-2xl mr-3 bg-sky-100  rounded-full p-[3px]" />
-                      {planDetails.prioritySupport ? "Priority Support" : "Standard Support"}
+                    <li className="flex items-center text-sm ">
+                      <FcOk className="text-2xl mr-3 rounded-full p-[3px]" />
+                      {planDetails.prioritySupport
+                        ? "Priority Support"
+                        : "Standard Support"}
                     </li>
-                    <li className="flex items-center text-sm text-gray-500">
-                      <FcOk className="text-2xl mr-3 bg-sky-100  rounded-full p-[3px]" />
-                      {planDetails.recurringTransactions ? "Recurring Transactions" : "No Recurring Transactions"}
+                    <li className="flex items-center text-sm">
+                      <FcOk className="text-2xl mr-3  rounded-full p-[3px]" />
+                      {planDetails.recurringTransactions
+                        ? "Recurring Transactions"
+                        : "No Recurring Transactions"}
                     </li>
-                    <li className="flex items-center text-sm text-gray-500">
-                      <FcOk className="text-2xl mr-3 bg-sky-100  rounded-full p-[3px]" />
+                    {/* <li className="flex items-center text-sm ">
+                      <FcOk className="text-2xl mr-3  rounded-full p-[3px]" />
                       {planDetails.cloudStorage} Cloud Storage
-                    </li>
+                    </li> */}
                   </ul>
 
-                  <button type="button" className="w-full mt-6 px-4 py-2 text-sm tracking-wide bg-purple-600 hover:bg-purple-700 text-white rounded-xl">
+                  <button
+                    type="button"
+                    className="w-full mt-6 px-4 py-2 text-sm tracking-wide bg-purple-600 hover:bg-purple-700 text-white rounded-xl"
+                  >
                     Get Started
                   </button>
                 </div>

@@ -43,7 +43,7 @@ puts "Created #{Category.count} categories."
     first_name: Faker::Name.first_name,
     last_name: Faker::Name.last_name,
     username: Faker::Internet.unique.username,
-    email: "admin#{i + 1}@example.com",
+    email: "admin#{i + 1}@test.com",
     password: "assword",
     password_confirmation: "assword",
     role: :admin,  

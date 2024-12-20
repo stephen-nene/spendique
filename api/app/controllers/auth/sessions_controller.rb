@@ -83,7 +83,7 @@ module Auth
             UserMailer.welcome_email(user, @frontend_url).deliver_later
             render json: { message: "Your email has been updated and the activation email has been sent to #{email}." }, status: :ok
           else
-            render json: { error: user.errors.full_messages  }, status: :unprocessable_entity
+            render json: { error: user.errors  }, status: :unprocessable_entity
           end
         elsif user.token.present? && user.token_expiry > Time.current
           # Token still valid

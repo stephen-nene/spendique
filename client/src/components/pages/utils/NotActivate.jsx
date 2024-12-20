@@ -29,6 +29,7 @@ export default function NotActivated({ user, darkMode }) {
         res?.data?.message || "Activation email resent successfully."
       );
     } catch (err) {
+      console.error(err);
       setError(
         err?.response?.data?.message ||
           "Failed to resend activation email. Please try again."

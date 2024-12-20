@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     get "me", to: "sessions#me"
     delete "logout", to: "sessions#logout"
   end
+  post 'api/contact', to: 'contacts#create'
 
   resources :meetings
   resources :users

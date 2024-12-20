@@ -61,8 +61,8 @@ function App() {
     }
   }, [dispatch, userData]);
 
-  const renderProtectedRoute = (allowedRoles = [], Component) => (
-    <ProtectedRoute allowedRoles={allowedRoles}>
+  const renderProtectedRoute = (allowedRoles = [], Component,allowPendingAccess=false) => (
+    <ProtectedRoute allowedRoles={allowedRoles} allowPendingAccess={allowPendingAccess}>
       <Suspense fallback={<LoadingFallback />}>
         <Component />
       </Suspense>
@@ -73,7 +73,7 @@ function App() {
     <>
       <div className={`${darkMode ? "dark" : ""} flex flex-col `}>
         <Navbar />
-        <div className="bg-[#fbeeffd2] dark:bg-[#120516] dark:text-white min-h-screen pt-20 md:pt-[100px]  mt -20">
+        <div className="bg-[#fbeeffd2] dark:bg-gray-800 [#120516] dark:text-white min-h-screen pt-20 md:pt-[100px]  mt -20">
           <Suspense fallback={<LoadingFallback />}>
             <Routes>
               {/* Public Routes */}
@@ -91,7 +91,7 @@ function App() {
               {/* Protected Routes */}
               <Route
                 path="/profile"
-                element={renderProtectedRoute([], Profiles)}
+                element={renderProtectedRoute([], Profiles,true)}
               />
               <Route
                 path="/finances"

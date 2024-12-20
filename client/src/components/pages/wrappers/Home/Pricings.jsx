@@ -110,7 +110,7 @@ export default function Pricings() {
             return (
               <div
                 key={index}
-                className="bg-white dark:bg-slate-500 shadow rounded-3xl p-6 hover:scale-105 transition-all duration-300"
+                className="bg-white dark:bg-slate-500 shadow rounded-3xl p-6 "
               >
                 <h4 className="text-gray-800 text-lg mb-3">{plan.name}</h4>
                 <h3 className="text-4xl font-semibold ">
@@ -152,7 +152,7 @@ export default function Pricings() {
 
                   <button
                     type="button"
-                    className="w-full mt-6 px-4 py-2 text-sm tracking-wide bg-purple-600 hover:bg-purple-700 text-white rounded-xl"
+                    className="w-full mt-6 px-4 py-2 text-sm tracking-wide bg-sky-600 hover:bg-sky-700 text-white rounded-xl"
                   >
                     Get Started
                   </button>

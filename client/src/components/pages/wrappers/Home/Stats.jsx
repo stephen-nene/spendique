@@ -21,9 +21,9 @@ export default function Stats() {
           manage your spending effectively. See why users love us:
         </p>
         <div className="grid md:grid-cols-4 sm:grid-cols-2 gap-5">
-          {stats.map((stat) => {
+          {stats.map((stat,index) => {
             return (
-              <div className="bg-white dark:bg-gray-500 rounded-xl border dark:border-gray-800 px-7 py-8">
+              <div key={index} className="bg-white dark:bg-gray-500 rounded-xl border dark:border-gray-800 px-7 py-8">
                 <p className="text-gray-400 text-base font-semibold mb-1">
                   {stat.name}
                 </p>

@@ -26,27 +26,25 @@ const MenuItems = ({ onClick, userData, isDashRoute }) => {
   return (
     <>
       {links.map(({ to, label }) => (
-        <NavLink 
-          key={to} 
-          onClick={onClick} 
-          to={to} 
-          className="nav-link"
-        >
+        <NavLink key={to} onClick={onClick} to={to} className="nav-link">
           {label}
         </NavLink>
       ))}
-      
-      {/* Conditional login/dashboard buttons */}
+
       {!userData && !isDashRoute && (
-        <Link onClick={onClick} to="/login" className="btn btn-login">
+        <Link
+          onClick={onClick}
+          to="/login"
+          className="btn bg-green-500 btn-login"
+        >
           Login
         </Link>
       )}
-      
+
       {userData?.role === "admin" && (
-        <Link 
-          to={isDashRoute ? "/" : "/dashboard"} 
-          className="btn btn-login"
+        <Link
+          to={isDashRoute ? "/" : "/dashboard"}
+          className="btn bg-green-500  btn-login"
         >
           {isDashRoute ? "Public" : "Dashboard"}
         </Link>
@@ -86,10 +84,10 @@ export const Navbar = () => {
 
   return (
     // <div className={``}>
-    <header className="navbar bg-sky-500 dark:bg-sky-900  dark:bg -[#1f2c31]">
+    <header className=" text-xl navbar bg-sky-500 dark:bg-sky-900  dark:text-white bg -[#1f2c31]">
       <nav className="container">
         <div className="navbar-wrapper">
-          <NavLink className="text-2xl font-bold" to="/">
+          <NavLink className="text-2xl text-f font-bold" to="/">
             SpendIQue
           </NavLink>
 
@@ -102,7 +100,7 @@ export const Navbar = () => {
           <div className="flex items-center gap-4">
             {userData && (
               <Link to="/profile">
-                <FaUser className="icon text-gray-600" size={24} />
+                <FaUser className="icon " size={24} />
               </Link>
             )}
 
@@ -122,7 +120,7 @@ export const Navbar = () => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden mobile-menu">
+        <div className="md:hidden mobile-menu border-black border-t">
           <MenuItems
             onClick={toggleMenu}
             userData={userData}

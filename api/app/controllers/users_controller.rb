@@ -2,15 +2,14 @@ class UsersController < ApplicationController
   before_action :set_user, only: %i[ show update destroy ]
 
   # GET /users
-def index
-  @users = User.all.page(params[:page])
+  def index
+    @users = User.all.page(params[:page])
 
-  render json: { 
-    users: @users.map {|user| UserSerializer.new(user)},
-    meta: pagination_meta(@users) 
-  }
-end
-
+    render json: {
+             users: @users.map { |user| UserSerializer.new(user) },
+             meta: pagination_meta(@users),
+           }
+  end
 
   # GET /users/1
   def show
@@ -53,7 +52,6 @@ end
       render json: { error: "User not found with id=#{params[:id]}" }, status: :not_found
     end
   end
-  
 
   # Only allow a list of trusted parameters through.
   def user_params

@@ -1,60 +1,175 @@
-import { message } from "antd";
 import React, { useState } from "react";
+import { Input, Button, Alert, message, Form, Spin } from "antd";
+import { MailOutlined, ReloadOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-// import { reactivateAccount } from "./ServerCom";
+import apiClient from "../../../helpers/apiClient";
 
-export default function NotActivate({ user, darkMode }) {
+export default function NotActivated({ user, darkMode }) {
   const [error, setError] = useState("");
   const [serverMessage, setServerMessage] = useState("");
-  const [loading, setLoading] = useState("");
-  const handleReactivate = (e) => {
-    e.preventDefault();
+  const [isLoading, setIsLoading] = useState(false);
+  const [newEmail, setNewEmail] = useState("");
 
-    if (!user) {
-        message.warning("You have to be logged to perform this action",4);
-        return;
-    }
-    message.success("resending email to " + user.email)
-    // reactivateAccount(user.user.email, setError, setServerMessage, setLoading);
-
+  // Email validation logic
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email) return "Email is required";
+    if (!emailRegex.test(email)) return "Please enter a valid email address";
+    return "";
   };
+
+  // Handle resend activation email
+  const handleReactivate = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError(""); // Clear previous errors
+    try {
+      const res = await apiClient.post("/auth/resend_activation");
+      setServerMessage(
+        res?.data?.message || "Activation email resent successfully."
+      );
+    } catch (err) {
+      setError(
+        err?.response?.data?.message ||
+          "Failed to resend activation email. Please try again."
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Handle email input change
+  const handleEmailChange = (e) => {
+    setNewEmail(e.target.value);
+  };
+
+  // Handle update email address
+  const handleUpdateEmail = async () => {
+    const validationError = validateEmail(newEmail);
+    if (validationError) {
+      message.error(validationError, 4);
+      return;
+    }
+
+    setIsLoading(true);
+    setError(""); // Clear previous errors
+    try {
+      const res = await apiClient.post("/auth/resend_activation", {
+        new_email: newEmail,
+      });
+      setServerMessage(
+        res?.data?.message ||
+          `Email updated to ${newEmail}. Please check your inbox.`
+      );
+      setNewEmail("");
+    } catch (err) {
+      const serverErrors = err.response?.data?.error || [
+        "An unknown error occurred",
+      ];
+      if (Array.isArray(serverErrors)) {
+        setError(` ${serverErrors.join(", ")}`);
+      } else {
+        setError(` ${serverErrors}`);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <div className={`p-4 ${darkMode? 'bg-slate-900':"bg"} flex flex-col items-center justify-center h-screen transition`}>
-      <h1
-        className={`text-5xl ${
-          !darkMode ? " text-gray-900" : " text-gray-200"
-        } font-bold mb-4`}
-      >
-        Account not activated
-      </h1>
+    <div
+      className={`flex justify-center items-center min-h-screen ${
+        darkMode ? "bg-gray-800" : "bg-white"
+      }`}
+    >
+      <div className="max-w-lg w-full p-6 dark:text-white text-black">
+        <h1 className="text-2xl font-bold mb-6 text-center">
+          Account Not Activated
+        </h1>
 
-      {serverMessage ? (
-        <>
-          <p className="text-xl text-green-500 mb-2">{serverMessage}</p>
-          <p className="text-xl text-green-500 mb-8">please check your inbox</p>
-        </>
-      ) : (
-        <>
-          <p className="text-xl text-gray-600 mb-3">
-            An email was sent to your inbox with instructions on how activate your account.
-          </p>
-          <p className="text-lg text-gray-600 mb-8">
-            To resend the email click{" "}
-            <span
-              onClick={(e) => handleReactivate(e)}
-              className={`text-blue-500 cursor-pointer ${
-                darkMode ? "dark:text-blue-400" : ""
-              }`}
+        {serverMessage ? (
+          <Alert
+            message="Success"
+            description={serverMessage}
+            type="success"
+            showIcon
+            className="mb-4"
+          />
+        ) : (
+          <>
+            <Alert
+              message={
+                <div>
+                  <p>
+                    An activation link was sent to your email address on
+                    sign-up:
+                  </p>
+                  <p className="font-semibold">
+                    {user?.email || "(No email provided)"}
+                  </p>
+                </div>
+              }
+              type="info"
+              showIcon
+            />
+
+            <p className="text-sm text-gray-600 dark:text-gray-300 mt-4">
+              Didn&apos;t receive it? You can resend the email or update your
+              email address below.
+            </p>
+          </>
+        )}
+
+        {!serverMessage && (
+          <div className="space-y-4 mt-6">
+            <Button
+              type="primary"
+              icon={<ReloadOutlined />}
+              loading={isLoading}
+              onClick={handleReactivate}
+              block
+              className="h-10"
             >
-              here
-            </span>
-            .
-          </p>
-        </>
-      )}
-      {/* <p className="text-lg text-gray-600 mb-8">You have 5 days to activate it else your account will be revoked .</p> */}
+              Resend Activation Email
+            </Button>
 
-      {/* <Link to="/login" className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Go to Login</Link> */}
+            <Form layout="vertical">
+              <Form.Item
+                label="Update Email Address"
+                name="email"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input your email address",
+                  },
+                ]}
+              >
+                <Input
+                  prefix={<MailOutlined className="text-gray-400" />}
+                  placeholder="Enter new email address"
+                  size="large"
+                  value={newEmail}
+                  onChange={handleEmailChange}
+                />
+              </Form.Item>
+
+              <Button
+                type="default"
+                onClick={handleUpdateEmail}
+                block
+                className="h-10"
+                loading={isLoading}
+              >
+                Update Email Address
+              </Button>
+            </Form>
+          </div>
+        )}
+
+        {error && (
+          <Alert message={error} type="error" showIcon className="mt-4" />
+        )}
+      </div>
     </div>
   );
 }

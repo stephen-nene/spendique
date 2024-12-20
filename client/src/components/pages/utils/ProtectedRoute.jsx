@@ -4,7 +4,7 @@ import NotLoggedIn from "./NotLoggedIn";
 import NotActivate from "./NotActivate";
 import Suspended from "./Suspended";
 
-const ProtectedRoute = ({ children, allowedRoles }) => {
+const ProtectedRoute = ({ children, allowedRoles, allowPendingAccess }) => {
   const userData = useSelector((state) => state.user.userData);
   const darkMode = useSelector((state) => state.app.darkMode);
 
@@ -12,9 +12,6 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
     return <NotLoggedIn darkMode={darkMode} />;
   }
 
-  if (userData.status === "inactive") {
-    return <NotActivate user={userData} darkMode={darkMode} />;
-  }
   // if (userData.status === "suspended") {
   //   return <Suspended darkMode={darkMode} />;
   // }
@@ -25,6 +22,9 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
     !allowedRoles?.includes(userData.role)
   ) {
     return <Unauthorised darkMode={darkMode} />;
+  }
+  if (userData.status === "pending" && !allowPendingAccess) {
+    return <NotActivate user={userData} darkMode={darkMode} />;
   }
 
   return children;

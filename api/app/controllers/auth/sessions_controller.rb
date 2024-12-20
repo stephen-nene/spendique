@@ -1,6 +1,6 @@
 module Auth
   class SessionsController < ApplicationController
-    before_action :authorize_request, only: [:me, :logout]
+    before_action :authorize_request, only: [:me, :logout,:resend_activation]
     before_action :set_frontend_url
 
     # POST /auth/register
@@ -73,18 +73,30 @@ module Auth
     def resend_activation
       # user = User.find_by(email: params[:email])
       user = @current_user
+      email = params[:new_email]
 
       if user
-        if user.token.present? && user.token_expiry > Time.current
-          UserMailer.welcome_email(user, @frontend_url).deliver_now
+        if email.present? && email != user.email
+          # Update user's email
+          if user.update(email: email)
+            user.generate_token(1.day.from_now)
+            UserMailer.welcome_email(user, @frontend_url).deliver_later
+            render json: { message: "Your email has been updated and the activation email has been sent to #{email}." }, status: :ok
+          else
+            render json: { error: user.errors.full_messages  }, status: :unprocessable_entity
+          end
+        elsif user.token.present? && user.token_expiry > Time.current
+          # Token still valid
+          UserMailer.welcome_email(user, @frontend_url).deliver_later
           render json: { message: "Activation email already sent. Please check your inbox." }, status: :ok
         else
+          # Generate a new token and resend email
           user.generate_token(1.day.from_now)
-          UserMailer.welcome_email(user, @frontend_url).deliver_now
+          UserMailer.welcome_email(user, @frontend_url).deliver_later
           render json: { message: "Activation email has been resent. Please check your inbox." }, status: :ok
         end
       else
-        render json: { error: "No user found with that email." }, status: :not_found
+        render json: { error: "No user found." }, status: :not_found
       end
     end
 

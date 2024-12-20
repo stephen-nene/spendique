@@ -13,56 +13,40 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 1rem 1.5rem;
+  padding: 1.5rem 1.5rem;
 }
 
-.dark .navbar  {
-  /* background-color: #030712; */
-  color: #e2e8f0;
-}
 
-/* NavLink Styles */
-.nav-link {
-  color: #2d3748;
-  transition: color 0.3s ease-in-out;
-}
+
 
 .nav-link:hover {
   color: #3182ce;
 }
 
-.dark  .navbar .nav-link {
-  color: #a0aec0;
-}
-
-.dark  .navbar .nav-link:hover {
-  color: #63b3ed;
-}
-
 /* Button styles */
 .btn {
-  padding: 1rem 1.5rem;
+  padding: 4px 10px;
   border-radius: 0.375rem;
   display: inline-block;
 }
 
-.btn-login {
+/* .btn-login {
   background-color: #48bb78;
   color: white;
   transition: background-color 0.3s ease-in-out;
-}
+} */
 
-.btn-login:hover {
+/* .btn-login:hover {
   background-color: #38a169;
 }
 
 .dark  .navbar .btn-login {
   background-color: #2f855a;
-}
+} */
 
-.dark  .navbar .btn-login:hover {
+/* .dark  .navbar .btn-login:hover {
   background-color: #276749;
-}
+} */
 
 /* Mobile Menu Styles */
 .mobile-menu {
@@ -70,14 +54,10 @@
   flex-direction: column;
   align-items: center;
   padding: 1rem 1.5rem;
-  background-color: white;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.dark  .navbar .mobile-menu {
-  background-color: #2d3748;
-  color: #a0aec0;
-}
+
 
 .mobile-menu .nav-link {
   margin-bottom: 1rem;

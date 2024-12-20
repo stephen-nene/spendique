@@ -29,7 +29,7 @@ export default function NotActivated({ user, darkMode }) {
         res?.data?.message || "Activation email resent successfully."
       );
     } catch (err) {
-      console.error(err);
+      console.error(err.response);
       setError(
         err?.response?.data?.message ||
           "Failed to resend activation email. Please try again."
@@ -64,6 +64,7 @@ export default function NotActivated({ user, darkMode }) {
       );
       setNewEmail("");
     } catch (err) {
+      console.error(err.response);
       const serverErrors = err.response?.data?.error || [
         "An unknown error occurred",
       ];

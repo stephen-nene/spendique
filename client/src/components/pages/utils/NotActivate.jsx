@@ -78,9 +78,7 @@ export default function NotActivated({ user, darkMode }) {
 
   return (
     <div
-      className={`flex justify-center items-center min-h-screen ${
-        darkMode ? "bg-gray-800" : "bg-white"
-      }`}
+      className=" flex justify-center items-center min-h-screen "
     >
       <div className="max-w-lg w-full p-6 dark:text-white text-black">
         <h1 className="text-2xl font-bold mb-6 text-center">

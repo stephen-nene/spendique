@@ -31,12 +31,12 @@ export async function fetchFinances(page = 1,setFinanceData,setLastFetcheddate,v
 
         return response.data;
       } else {
-        console.error("Failed to fetch finances:", response.data);
+        // console.error("Failed to fetch finances:", response.data);
         showMessage("error", "Failed to fetch finances. Please try again.", 3);
         throw new Error("Failed to fetch finances.");
       }
     } catch (error) {
-      console.error("Error fetching finances:", error);
+      // console.error("Error fetching finances:", error);
       showMessage("error", "Failed to fetch finances. Please try again.", 3);
       throw error;
     }

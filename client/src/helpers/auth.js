@@ -82,7 +82,7 @@ export const serverSignup = async (values, navigate,dispatch) => {
     }
   } catch (error) {
     loadingMessage();
-    console.error("Error response:", error);
+    // console.error("Error response:", error);
     throw error;
   } finally {
     loadingMessage();

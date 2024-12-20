@@ -26,7 +26,7 @@ export default function Categories() {
       setMeta(data.meta);
       setCategories(data.categories);
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       message.error("Failed to get categories for page: " + page);
     }
   };

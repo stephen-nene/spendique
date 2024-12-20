@@ -29,7 +29,7 @@ export default function NotActivated({ user, darkMode }) {
         res?.data?.message || "Activation email resent successfully."
       );
     } catch (err) {
-      console.error(err.response);
+      // console.error(err.response);
       setError(
         err?.response?.data?.message ||
           "Failed to resend activation email. Please try again."
@@ -64,7 +64,7 @@ export default function NotActivated({ user, darkMode }) {
       );
       setNewEmail("");
     } catch (err) {
-      console.error(err.response);
+      // console.error(err.response);
       const serverErrors = err.response?.data?.error || [
         "An unknown error occurred",
       ];
@@ -79,9 +79,7 @@ export default function NotActivated({ user, darkMode }) {
   };
 
   return (
-    <div
-      className=" flex justify-center items-center min-h-screen "
-    >
+    <div className=" flex justify-center items-center min-h-screen ">
       <div className="max-w-lg w-full p-6 dark:text-white text-black">
         <h1 className="text-2xl font-bold mb-6 text-center">
           Account Not Activated
@@ -100,22 +98,23 @@ export default function NotActivated({ user, darkMode }) {
             <Alert
               message={
                 <div>
-                  <p>
-                    An activation link was sent to your email address on
-                    sign-up:
-                  </p>
                   <p className="font-semibold">
-                    {user?.email || "(No email provided)"}
+                    Hello {user?.email || "(No email provided)"}
                   </p>
                 </div>
               }
-              type="info"
+              description={
+                <p className="text-md">
+                  An activation link was sent to this email address on sign-up:
+                </p>
+              }
+              type="warning"
               showIcon
             />
 
             <p className="text-sm text-gray-600 dark:text-gray-300 mt-4">
-              Didn&apos;t receive it? You can resend the email or update your
-              email address below.
+              Didn&apos;t receive it? You can resend the link or update your
+              email address below if it was wrong.
             </p>
           </>
         )}

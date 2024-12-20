@@ -43,7 +43,7 @@ const MenuItems = ({ onClick, userData, isDashRoute }) => {
 
       {userData?.role === "admin" && (
         <Link
-          to={isDashRoute ? "/" : "/dashboard"}
+          to={isDashRoute ? "/" : "/dash"}
           className="btn bg-green-500  btn-login"
         >
           {isDashRoute ? "Public" : "Dashboard"}

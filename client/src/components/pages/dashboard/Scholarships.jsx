@@ -31,7 +31,7 @@ export default function Scholarships({ darkMode }) {
       setScholarships(response?.scholarships);
       setMeta(response?.meta);
     } catch (error) {
-      console.error("Error fetching scholarships:", error);
+      // console.error("Error fetching scholarships:", error);
       message.error("Failed to fetch scholarships.");
     }
   };

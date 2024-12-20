@@ -25,7 +25,7 @@ export default function AllFinances() {
       setMeta(data.meta);
       setFinances(data.finances);
     } catch (error) {
-      console.error("Failed to fetch finances:", error);
+      // console.error("Failed to fetch finances:", error);
     }
   };
 

@@ -79,7 +79,7 @@ class FinancesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def finance_params
-    params.expect(finance: [:user_id, :title, :transaction_cost, :description, :transaction_type, :amount, recurring: {}, categories: []])
+    params.expect(finance: [:user_id, :title, :date_created, :transaction_cost, :description, :transaction_type, :amount, recurring: {}, categories: []])
   end
 
   # def pagination_meta(finances)

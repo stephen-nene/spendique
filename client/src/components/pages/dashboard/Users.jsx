@@ -24,8 +24,8 @@ export default function Users({ darkMode }) {
       setMeta(data.meta);
       setUsers(data.users);
     } catch (error) {
-      console.error(error);
-      console.error("Failed to get users for page:", page);
+      // console.error(error);
+      message.error("Failed to get users for page:", page);
     }
   };
   // console.log(meta)

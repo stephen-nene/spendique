@@ -19,7 +19,7 @@ import {
   FileTextOutlined,
   TagOutlined,
 } from "@ant-design/icons";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import apiClient from "../../helpers/apiClient";
 const { TextArea } = Input;
 const { Option } = Select;
@@ -29,7 +29,7 @@ const NewFinance = () => {
   const [isRecurring, setIsRecurring] = useState(false);
   const [categories, setCategories] = useState([]);
   const [newCategoryName, setNewCategoryName] = useState(""); // State for the new category input
-  const inputRef = useRef(null); 
+  const inputRef = useRef(null);
   const navigate = useNavigate();
 
   // const userData = use
@@ -70,33 +70,30 @@ const NewFinance = () => {
     }
   };
 
+  const handleSubmit = async (values) => {
+    const financeEntry = {
+      finance: {
+        ...values,
+        transaction_type: parseInt(values.transaction_type, 10),
+      },
+    };
 
-const handleSubmit = async (values) => {
-  const financeEntry = {
-    finance: {
-      ...values,
-      transaction_type: parseInt(values.transaction_type, 10), 
-    },
-  };
-
-  
-  try {
-    // console.log("Finance Entry:", financeEntry);
-    const res = await apiClient.post("/finances", financeEntry);
-    if (res.status === 201) {
-      navigate('/finances')
-      message.success("Finance entry created successfully!", 3);      
-    } else {
-      console.log(res);
+    try {
+      // console.log("Finance Entry:", financeEntry);
+      const res = await apiClient.post("/finances", financeEntry);
+      if (res.status === 201) {
+        // console.log(res.data);
+        navigate("/finances");
+        message.success("Finance entry created successfully!", 3);
+      } else {
+        // console.log(res);
+        message.error("Failed to create finance entry. Please try again.", 3);
+      }
+    } catch (e) {
+      console.error("Error creating finance entry:", e);
       message.error("Failed to create finance entry. Please try again.", 3);
     }
-
-  } catch (e) {
-    console.error("Error creating finance entry:", e);
-    message.error("Failed to create finance entry. Please try again.", 3);
-  }
-};
-
+  };
 
   return (
     <div className="container mx-auto px-4 py-6">
@@ -177,6 +174,21 @@ const handleSubmit = async (values) => {
             />
           </Form.Item>
         </div>
+        {/* Created At */}
+        <Form.Item
+          name="date_created"
+          label="Transaction Date"
+          rules={[
+            { required: true, message: "Please select a transaction date" },
+          ]}
+        >
+          <DatePicker
+            prefix={<CalendarOutlined />}
+            size="large"
+            className="w-full"
+            placeholder="Select the transaction date"
+          />
+        </Form.Item>
 
         {/* Transaction Type */}
         <Form.Item
@@ -281,20 +293,20 @@ const handleSubmit = async (values) => {
 export default NewFinance;
 
 const Recurring = () => {
-    const recurringFrequencies = [
-      { id: "daily", name: "Daily" },
-      { id: "weekly", name: "Weekly" },
-      { id: "biweekly", name: "Bi-Weekly" },
-      { id: "monthly", name: "Monthly" },
-      { id: "quarterly", name: "Quarterly" },
-      { id: "annually", name: "Annually" },
-    ];
+  const recurringFrequencies = [
+    { id: "daily", name: "Daily" },
+    { id: "weekly", name: "Weekly" },
+    { id: "biweekly", name: "Bi-Weekly" },
+    { id: "monthly", name: "Monthly" },
+    { id: "quarterly", name: "Quarterly" },
+    { id: "annually", name: "Annually" },
+  ];
 
-    const recurringNoteOptions = [
-      "Fixed Cost",
-      "Estimated Amount",
-      "Variable Cost",
-    ];
+  const recurringNoteOptions = [
+    "Fixed Cost",
+    "Estimated Amount",
+    "Variable Cost",
+  ];
   return (
     <div className="space-y-4">
       {/* Frequency */}

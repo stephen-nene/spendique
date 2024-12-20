@@ -40,7 +40,7 @@ export const Profiles = () => {
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Updated Profile Data:", formData);
+    // console.log("Updated Profile Data:", formData);
     setIsEditing(false);
   };
 

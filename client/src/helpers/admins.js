@@ -21,12 +21,12 @@ export async function fetchUsers(page = 1, dispatch) {
       dispatch(setUserPageData(page, response.data));
       return response.data;
     } else {
-      console.error("Failed to fetch users:", response.data);
+      // console.error("Failed to fetch users:", response.data);
       showMessage("error", "Failed to fetch users. Please try again.", 3);
       throw new Error("Failed to fetch users.");
     }
   } catch (error) {
-    console.error("Error fetching users:", error);
+    // console.error("Error fetching users:", error);
     showMessage("error", "Failed to fetch users. Please try again.", 3);
     throw error;
   } finally {
@@ -42,12 +42,12 @@ export async function fetchMeetings(page = 1, dispatch) {
       dispatch(setMeetingsPageData(page, response.data));
       return response.data;
     } else {
-      console.error("Failed to fetch meetings:", response.data);
+      // console.error("Failed to fetch meetings:", response.data);
       showMessage("error", "Failed to fetch meetings. Please try again.", 3);
       throw new Error("Failed to fetch meetings.");
     }
   } catch (error) {
-    console.error("Error fetching meetings:", error);
+    // console.error("Error fetching meetings:", error);
     showMessage("error", "Failed to fetch meetings. Please try again.", 3);
     throw error;
   } finally {
@@ -63,7 +63,7 @@ export async function fetchScholarships(page, dispatch) {
       dispatch(setScholarshipPageData(page, response.data));
       return response.data;
     } else {
-      console.error("Failed to fetch scholarships:", response.data);
+      // console.error("Failed to fetch scholarships:", response.data);
       showMessage(
         "error",
         "Failed to fetch scholarships. Please try again.",
@@ -72,7 +72,7 @@ export async function fetchScholarships(page, dispatch) {
       throw new Error("Failed to fetch scholarships.");
     }
   } catch (error) {
-    console.error("Error fetching scholarships:", error);
+    // console.error("Error fetching scholarships:", error);
     showMessage("error", "Failed to fetch scholarships. Please try again.", 3);
     throw error;
   } finally {
@@ -90,12 +90,12 @@ export async function fetchFinances(page = 1, dispatch, viewMyRecords = false) {
       dispatch(setFinancesPageData(page, response.data, viewMyRecords));
       return response.data;
     } else {
-      console.error("Failed to fetch finances:", response.data);
+      // console.error("Failed to fetch finances:", response.data);
       showMessage("error", "Failed to fetch finances. Please try again.", 3);
       throw new Error("Failed to fetch finances.");
     }
   } catch (error) {
-    console.error("Error fetching finances:", error);
+    // console.error("Error fetching finances:", error);
     showMessage("error", "Failed to fetch finances. Please try again.", 3);
     throw error;
   } finally {
@@ -111,12 +111,12 @@ export async function fetchCategories(page = 1, dispatch) {
       dispatch(setCategoriesPageData(response.data));
       return response.data;
     } else {
-      console.error("Failed to fetch categories:", response.data);
+      // console.error("Failed to fetch categories:", response.data);
       showMessage("error", "Failed to fetch categories. Please try again.", 3);
       throw new Error("Failed to fetch categories.");
     }
   } catch (error) {
-    console.error("Error fetching categories:", error);
+    // console.error("Error fetching categories:", error);
     showMessage("error", "Failed to fetch categories. Please try again.", 3);
     throw error;
   } finally {

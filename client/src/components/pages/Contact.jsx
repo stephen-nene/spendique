@@ -12,7 +12,7 @@ export default function Contact() {
 
   const onFinish = async (values) => {
     setLoading(true);
-    console.log("Form submitted with values:", { message: { ...values } });
+    // console.log("Form submitted with values:", { message: { ...values } });
     try {
       const response = await apiClient.post("/api/contact", {
         message: { ...values },
@@ -25,7 +25,7 @@ export default function Contact() {
         form.resetFields();
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     } finally {
       setLoading(false);
     }

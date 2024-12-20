@@ -15,6 +15,7 @@ export default function FinanceCards({ financeData, dateToView, onDelete }) {
     return new Intl.DateTimeFormat("en-US", {
       weekday: "long",
       day: "numeric",
+      month:"short",
       hour: "2-digit",
       minute: "2-digit",
       second: "2-digit",
@@ -26,8 +27,8 @@ export default function FinanceCards({ financeData, dateToView, onDelete }) {
   const filterFinanceByType = (type) =>
     financeData
       ? financeData.filter((finance) => {
-          const financeDate = finance.created_at
-            ? new Date(finance.created_at).toISOString().split("T")[0]
+          const financeDate = finance.date_created
+            ? new Date(finance.date_created).toISOString().split("T")[0]
             : null;
           return (
             finance.transaction_type === type && financeDate === selectedDate
@@ -83,13 +84,13 @@ export default function FinanceCards({ financeData, dateToView, onDelete }) {
       type === "income" ? openSections.income : openSections.expense;
     const bgColors = {
       income: {
-        main: "bg-green-400",
-        item: "bg-green-100",
+        main: "bg-green-400 ",
+        item: "bg-green-100 hover:bg-rose-50",
         totalText: "text-green-900",
       },
       expense: {
         main: "bg-rose-400",
-        item: "bg-rose-300",
+        item: "bg-rose-300 hover:bg-green-50",
         totalText: "text-red-950",
       },
     }[type];
@@ -121,7 +122,7 @@ export default function FinanceCards({ financeData, dateToView, onDelete }) {
               items.map((finance) => (
                 <div
                   key={finance.id}
-                  className={`my-2 cursor-pointer hover:bg-gray-100 ${bgColors.item} p-2 rounded-lg group`}
+                  className={`my-2 cursor-pointer  ${bgColors.item} p-2 rounded-lg group`}
                 >
                   <div onClick={() => handleItemDelete(finance)}>
                     <h4 className="font-semibold">{finance.title}</h4>
@@ -142,17 +143,17 @@ export default function FinanceCards({ financeData, dateToView, onDelete }) {
                     )}
                     <p>
                       <strong>Created At:</strong>{" "}
-                      {formatDateTime(finance.created_at)}
+                      {formatDateTime(finance.date_created)}
                     </p>
                   </div>
-                  <div className="hidden group-hover:block text-right mt-2">
+                  {/* <div className="hidden group-hover:block text-right mt-2">
                     <button
                       className="text-red-600 hover:text-red-800 font-semibold"
                       onClick={() => handleItemDelete(finance)}
                     >
                       Delete
                     </button>
-                  </div>
+                  </div> */}
                 </div>
               ))
             ) : (

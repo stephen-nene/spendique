@@ -22,7 +22,7 @@ export default function Activate() {
         );
 
         setMessage(response.data.message);
-        console.log(response.data)
+        // console.log(response.data)
         // Optional: Navigate to login or dashboard after activation
         setTimeout(() => navigate("/login"), 3000);
       } catch (err) {

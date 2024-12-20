@@ -9,7 +9,7 @@ import Pricings from './wrappers/Home/Pricings'
 export const Home = () => {
   return (
     <>
-      <div className="flex flex-col gap-4  max-w-5xl px-6">
+      <div className="flex flex-col gap-4  max -w-5xl px-6">
         <Heros />
         <Services />
         <Stats />

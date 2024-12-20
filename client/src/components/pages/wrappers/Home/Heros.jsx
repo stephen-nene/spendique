@@ -43,8 +43,8 @@ export default function Heros() {
   }, []);
   return (
     <>
-      <div className="grid md:grid-cols-2 items-center md:gap-8 gap-6 font-[sans-serif] max-md:max-w-md mx-auto">
-        <div className="max-md:ord er-1 max-md:text-center mt-9">
+      <div className="grid md:grid-cols-2 items- center md:gap-8 gap-6 font-[sans-serif] max-w-5xl max-md:max-w-md mx-auto">
+        <div className="max-md:order-1 max-md:text-center mt-9">
           <h2 className="md:text-4xl text-3xl md:leading-10 font-extrabold text-gray-8 00 mb-4">
             Take Control of Your Finances
           </h2>

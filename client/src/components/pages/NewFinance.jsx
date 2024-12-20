@@ -23,15 +23,23 @@ import { Link, useNavigate } from "react-router-dom";
 import apiClient from "../../helpers/apiClient";
 const { TextArea } = Input;
 const { Option } = Select;
+import locale from "antd/locale/zh_CN";
+import dayjs from "dayjs";
 
 const NewFinance = () => {
   const [form] = Form.useForm();
   const [isRecurring, setIsRecurring] = useState(false);
   const [categories, setCategories] = useState([]);
   const [newCategoryName, setNewCategoryName] = useState(""); // State for the new category input
+  const [transactionType, setTransactionType] = useState(1); // Default to 1
+
   const inputRef = useRef(null);
   const navigate = useNavigate();
-
+  const handleValuesChange = (changedValues, allValues) => {
+    if (changedValues.transaction_type !== undefined) {
+      setTransactionType(allValues.transaction_type);
+    }
+  };
   // const userData = use
 
   React.useEffect(() => {
@@ -74,12 +82,15 @@ const NewFinance = () => {
     const financeEntry = {
       finance: {
         ...values,
+        date_created: values.date_created.format("YYYY-MM-DD HH:mm:ss.SSS"), // Full timestamp with milliseconds
+        // date_created: values.date_created.toISOString(),
+
         transaction_type: parseInt(values.transaction_type, 10),
       },
     };
 
     try {
-      // console.log("Finance Entry:", financeEntry);
+      console.log("Finance Entry:", financeEntry);
       const res = await apiClient.post("/finances", financeEntry);
       if (res.status === 201) {
         // console.log(res.data);
@@ -96,7 +107,7 @@ const NewFinance = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-6">
+    <div className="container mx-auto my-6">
       <Breadcrumb
         items={[
           {
@@ -109,7 +120,7 @@ const NewFinance = () => {
             title: "New Finance Entry",
           },
         ]}
-        className="mb-6"
+        className="mb-6 text-xl"
       />
 
       {/* Form */}
@@ -117,7 +128,16 @@ const NewFinance = () => {
         form={form}
         layout="vertical"
         onFinish={handleSubmit}
-        className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md"
+        initialValues={{
+          date_created: dayjs(),
+          transaction_type: 1,
+        }}
+        onValuesChange={handleValuesChange}
+        className={`max-w-2xl ${
+          transactionType === 1
+            ? "bg-rose-200 dark:bg-rose-900"
+            : "bg-sky-200 dark:bg-sky-900"
+        } mx-auto  p-8 rounded-lg shadow-md`}
       >
         <h2 className="text-2xl font-bold mb-6 text-center">
           Create New Finance Entry
@@ -187,6 +207,7 @@ const NewFinance = () => {
             size="large"
             className="w-full"
             placeholder="Select the transaction date"
+            showTime
           />
         </Form.Item>
 

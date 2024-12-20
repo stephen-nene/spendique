@@ -9,16 +9,14 @@ import Pricings from './wrappers/Home/Pricings'
 export const Home = () => {
   return (
     <>
-    <div className='flex flex-col gap-4 p-6'>
-      <Heros />
-      <Services />
-      <Stats />
-      <Testimonials />
-      <Teams />
-      <Pricings />
-
-
-    </div>
+      <div className="flex flex-col gap-4  max-w-5xl px-6">
+        <Heros />
+        <Services />
+        <Stats />
+        <Testimonials />
+        <Teams />
+        <Pricings />
+      </div>
     </>
-  )
+  );
 }

@@ -40,6 +40,8 @@ class FinancesController < ApplicationController
   def create
     finance_params_with_user = finance_params.merge(user_id: finance_params[:user_id] || session[:user_id])
     category_ids = finance_params[:categories] || []
+    date_created = params[:finance][:date_created].to_datetime
+    puts "Date received (UTC): #{date_created.utc}"
 
     categories = Category.where(id: category_ids)
 

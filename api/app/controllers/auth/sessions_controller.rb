@@ -73,12 +73,12 @@ module Auth
     def resend_activation
       # user = User.find_by(email: params[:email])
       user = @current_user
-      email = params[:new_email]
+      new_email = params[:new_email]
 
       if user
-        if email.present? && email != user.email
+        if new_email.present? && new_email != user.email
           # Update user's email
-          if user.update(email: email)
+          if user.update(email: new_email)
             user.generate_token(1.day.from_now)
             UserMailer.welcome_email(user, @frontend_url).deliver_later
             render json: { message: "Your email has been updated and the activation email has been sent to #{email}." }, status: :ok

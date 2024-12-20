@@ -9,7 +9,10 @@ bundle install
 # Run database migration
 # echo "Running db:migrate..."
 # bundle exec rails db:migrate
-
+echo "Running migrations for cache, queue, and cable databases..."
+bundle exec rails db:migrate:cache
+bundle exec rails db:migrate:queue
+bundle exec rails db:migrate:cable
 # Run seed if needed
 # echo "Running db:seed..."
 # bundle exec rails db:seed

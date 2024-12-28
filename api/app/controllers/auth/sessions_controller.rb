@@ -81,7 +81,7 @@ module Auth
           if user.update(email: new_email)
             user.generate_token(1.day.from_now)
             UserMailer.welcome_email(user, @frontend_url).deliver_now
-            render json: { message: "Your email has been updated and the activation email has been sent to #{email}." }, status: :ok
+            render json: { message: "Your email has been updated and the activation email has been sent to #{new_email}." }, status: :ok
           else
             render json: { error: user.errors  }, status: :unprocessable_entity
           end

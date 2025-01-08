@@ -52,7 +52,7 @@ export const serverLogin = async (values, navigate, dispatch) => {
       loadingMessage();
       showMessage("success", response?.data?.message, 2);
       dispatch(loginAction(response.data.user));
-      navigate("/profile");
+      navigate("/finances");
       return response.data;
     } else {
       loadingMessage();
@@ -76,7 +76,7 @@ export const serverSignup = async (values, navigate,dispatch) => {
     if (response.status === 201) {
       loadingMessage();
       showMessage("success", response?.data?.message, 3);
-      // navigate("/login");
+      navigate("/finances");
       dispatch(signupAction(response.data.user));
       return response.data;
     }

@@ -25,14 +25,13 @@ export const Forgot = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
+    <div className="min-h-screen flex items-center justify-center ">
       <div className="w-full max-w-md p-8 space-y-6 rounded-xl border shadow-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700">
-        <Typography.Title
-          level={2}
-          className="text-center text-gray-800 dark:text-white"
+        <h1
+          className="text-center text-2xl font-bold"
         >
           Forgot Password
-        </Typography.Title>
+        </h1>
 
         {/* Alert Messages */}
         {serverMessage && (
@@ -51,7 +50,6 @@ export const Forgot = () => {
         <Form
           name="forgot-password"
           onFinish={onFinish}
-          autoComplete="off"
           layout="vertical"
         >
           {/* Email Field */}
@@ -68,7 +66,7 @@ export const Forgot = () => {
             <Input
               placeholder="Enter your email"
               size="large"
-              className="bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200"
+              className="dark:bg-gray-600 "
             />
           </Form.Item>
 
@@ -80,7 +78,7 @@ export const Forgot = () => {
               loading={loading}
               block
               size="large"
-              className="bg-blue-600 hover:bg-blue-700 focus:ring focus:ring-blue-500 focus:ring-opacity-50 text-white transition-colors duration-300"
+              className="bg-blue-600 hover:bg-blue-700 focus:ring focus:ring-blue-500 focus:ring-opacity-50 transition-colors duration-300"
             >
               {loading ? "Sending..." : "Send Reset Link"}
             </Button>

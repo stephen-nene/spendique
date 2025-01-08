@@ -5,125 +5,100 @@ import {
   InputNumber,
   DatePicker,
   Select,
-  Switch,
-  Button,
-  Breadcrumb,
+  message,
   Divider,
   Space,
-  message,
 } from "antd";
 import {
   PlusOutlined,
   DollarOutlined,
-  CalendarOutlined,
-  FileTextOutlined,
   TagOutlined,
 } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import apiClient from "../../helpers/apiClient";
+import dayjs from "dayjs";
+
 const { TextArea } = Input;
 const { Option } = Select;
-import locale from "antd/locale/zh_CN";
-import dayjs from "dayjs";
 
 const NewFinance = () => {
   const [form] = Form.useForm();
-  const [isRecurring, setIsRecurring] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
-  const [newCategoryName, setNewCategoryName] = useState(""); // State for the new category input
-  const [transactionType, setTransactionType] = useState(1); // Default to 1
+  const [newCategoryName, setNewCategoryName] = useState("");
+  const [transactionType, setTransactionType] = useState(1);
 
   const inputRef = useRef(null);
   const navigate = useNavigate();
-  const handleValuesChange = (changedValues, allValues) => {
-    if (changedValues.transaction_type !== undefined) {
-      setTransactionType(allValues.transaction_type);
-    }
-  };
-  // const userData = use
 
   React.useEffect(() => {
-    async function getCategory() {
-      const response = await apiClient.get(`/categories?all=true`);
+    const getCategory = async () => {
+      const response = await apiClient.get("/categories?all=true");
       if (response.status === 200) {
         setCategories(response?.data?.categories);
-        const approvedCategories = categories.filter(
-          (category) => category.status === "approved"
-        );
       }
-    }
+    };
     getCategory();
   }, []);
 
-  // Handle adding a new category
   const handleAddCategory = async (e) => {
     e.preventDefault();
     if (!newCategoryName) return;
 
     try {
-      const response = await apiClient.post(`/categories`, {
+      const response = await apiClient.post("/categories", {
         name: newCategoryName,
-        status: "pending", // New categories can default to a pending state
+        status: "pending",
       });
       if (response.status === 201) {
-        // Add the new category to the dropdown
         setCategories([...categories, response.data]);
         setNewCategoryName("");
-        setTimeout(() => {
-          inputRef.current?.focus();
-        }, 0);
+        inputRef.current?.focus();
       }
     } catch (error) {
-      console.error("Error adding category:", error);
+      message.error("Failed to add category");
     }
   };
 
   const handleSubmit = async (values) => {
-    const financeEntry = {
-      finance: {
-        ...values,
-        date_created: values.date_created.format("YYYY-MM-DD HH:mm:ss.SSS"), // Full timestamp with milliseconds
-        // date_created: values.date_created.toISOString(),
-
-        transaction_type: parseInt(values.transaction_type, 10),
-      },
-    };
-
+    setLoading(true);
     try {
-      console.log("Finance Entry:", financeEntry);
+      const financeEntry = {
+        finance: {
+          ...values,
+          date_created: values.date_created.format("YYYY-MM-DD HH:mm:ss.SSS"),
+          transaction_type: parseInt(values.transaction_type, 10),
+        },
+      };
+
       const res = await apiClient.post("/finances", financeEntry);
       if (res.status === 201) {
-        // console.log(res.data);
         navigate("/finances");
-        message.success("Finance entry created successfully!", 3);
-      } else {
-        // console.log(res);
-        message.error("Failed to create finance entry. Please try again.", 3);
+        message.success("Finance entry created successfully!");
       }
-    } catch (e) {
-      console.error("Error creating finance entry:", e);
-      message.error("Failed to create finance entry. Please try again.", 3);
+    } catch (error) {
+      message.error("Failed to create finance entry");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="container mx-auto my-6">
-      <Breadcrumb
-        items={[
-          {
-            title: <Link to="/">Home</Link>,
-          },
-          {
-            title: <Link to="/finances">Finances</Link>,
-          },
-          {
-            title: "New Finance Entry",
-          },
-        ]}
-        className="mb-6 text-xl"
-      />
+    <div className="max-w-4xl mx-auto py-8 px-4">
+      <nav className="mb-8">
+        <div className="flex items-center gap-2 text-sm">
+          <Link to="/" className="text-blue-600 hover:underline">
+            Home
+          </Link>
+          <span>/</span>
+          <Link to="/finances" className="text-blue-600 hover:underline">
+            Finances
+          </Link>
+          <span>/</span>
+          <span className="text-gray-600">New</span>
+        </div>
+      </nav>
 
-      {/* Form */}
       <Form
         form={form}
         layout="vertical"
@@ -131,19 +106,23 @@ const NewFinance = () => {
         initialValues={{
           date_created: dayjs(),
           transaction_type: 1,
+          transaction_cost: 0,
         }}
-        onValuesChange={handleValuesChange}
-        className={`max-w-2xl ${
+        onValuesChange={(changedValues) => {
+          if (changedValues.transaction_type !== undefined) {
+            setTransactionType(changedValues.transaction_type);
+          }
+        }}
+        className={`max-w-2xl mx-auto p-6 rounded-lg shadow-lg ${
           transactionType === 1
-            ? "bg-rose-200 dark:bg-rose-900"
-            : "bg-sky-200 dark:bg-sky-900"
-        } mx-auto  p-8 rounded-lg shadow-md`}
+            ? "bg-rose-100 dark:bg-rose-900/30"
+            : "bg-sky-50 dark:bg-sky-900/30"
+        }`}
       >
-        <h2 className="text-2xl font-bold mb-6 text-center">
+        <h2 className="text-2xl font-semibold mb-6 text-center">
           Create New Finance Entry
         </h2>
 
-        {/* Title */}
         <Form.Item
           name="title"
           label="Title"
@@ -151,81 +130,63 @@ const NewFinance = () => {
         >
           <Input
             size="large"
-            prefix={<FileTextOutlined className="text-gray-400" />}
+            className="w-full px-4 py-2 rounded border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             placeholder="Enter transaction title"
           />
         </Form.Item>
 
-        {/* Amount */}
-        <div className="flex w-full gap-6 items-end">
-          {/* Amount Input */}
+        <div className="grid grid-cols-2 gap-4">
           <Form.Item
             name="amount"
-            label="Amount"
+            label="Amount in Ksh"
             rules={[{ required: true, message: "Please enter the amount" }]}
-            className="flex-1"
           >
             <InputNumber
+              prefix={<DollarOutlined className="text-gray-400 mr-2" />}
               size="large"
               className="w-full"
-              prefix={<DollarOutlined className="text-gray-400" />}
               formatter={(value) =>
-                `KSh ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
               }
               parser={(value) => value.replace(/KSh\s?|(,*)/g, "")}
             />
           </Form.Item>
 
-          {/* Transaction Cost Input */}
           <Form.Item
             name="transaction_cost"
-            label="Transaction Cost"
-            rules={[{ required: true, message: "Please enter the gas fee" }]}
-            className="flex-1"
+            label="Transaction Cost in Ksh"
+            rules={[
+              { required: true, message: "Please enter the transaction cost" },
+            ]}
           >
             <InputNumber
+              prefix={<DollarOutlined className="text-gray-400 mr-3" />}
               size="large"
-              className="w-1/2"
-              prefix={<DollarOutlined className="text-gray-400" />}
-              formatter={
-                (value) => `KSh ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",") // Replaced $ with KSh
+              className="w-full"
+              formatter={(value) =>
+                `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
               }
-              parser={(value) => value.replace(/KSh\s?|(,*)/g, "")} // Replaced $ with KSh
+              parser={(value) => value.replace(/KSh\s?|(,*)/g, "")}
             />
           </Form.Item>
         </div>
-        {/* Created At */}
+
         <Form.Item
           name="date_created"
           label="Transaction Date"
-          rules={[
-            { required: true, message: "Please select a transaction date" },
-          ]}
+          rules={[{ required: true, message: "Please select a date" }]}
         >
-          <DatePicker
-            prefix={<CalendarOutlined />}
-            size="large"
-            className="w-full"
-            placeholder="Select the transaction date"
-            showTime
-          />
+          <DatePicker size="large" className="w-full" />
         </Form.Item>
 
-        {/* Transaction Type */}
         <Form.Item
           name="transaction_type"
           label="Transaction Type"
-          rules={[
-            { required: true, message: "Please select a transaction type" },
-          ]}
+          rules={[{ required: true }]}
         >
           <Select size="large" placeholder="Select transaction type">
-            <Option key={0} value={0}>
-              Income
-            </Option>
-            <Option key={1} value={1}>
-              Expense
-            </Option>
+            <Option value={0}>Income</Option>
+            <Option value={1}>Expense</Option>
           </Select>
         </Form.Item>
 
@@ -259,13 +220,16 @@ const NewFinance = () => {
                     onChange={(e) => setNewCategoryName(e.target.value)}
                     onKeyDown={(e) => e.stopPropagation()} // Prevent dropdown from closing on Enter
                   />
-                  <Button
-                    type="text"
-                    icon={<PlusOutlined />}
+                  <button
+                    className="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded flex items-center space-x-2"
+                    type="button"
                     onClick={handleAddCategory}
                   >
-                    Add Category
-                  </Button>
+                    <span>
+                      <PlusOutlined />
+                    </span>
+                    <span>Add Category</span>
+                  </button>
                 </Space>
               </>
             )}
@@ -276,36 +240,25 @@ const NewFinance = () => {
           />
         </Form.Item>
 
-        {/* Description */}
         <Form.Item name="description" label="Description">
-          <TextArea
+          <textarea
+            className="w-full px-4 py-2 rounded border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
             rows={4}
-            placeholder="Enter additional details about the transaction"
+            placeholder="Enter transaction details"
           />
         </Form.Item>
 
-        {/* Recurring Toggle */}
-        <Form.Item label="Recurring Transaction ?">
-          <Switch
-            checked={isRecurring}
-            onClick={() => message.error("only for premium users", 3)}
-          />
-        </Form.Item>
-
-        {/* Recurring Details (if enabled) */}
-        {isRecurring && <Recurring />}
-
-        {/* Submit Button */}
-        <Form.Item>
-          <Button
-            size="large"
-            type="primary"
-            htmlType="submit"
-            className="w-full mt-4"
-          >
-            Create Finance Entry
-          </Button>
-        </Form.Item>
+        <button
+          type="submit"
+          disabled={loading}
+          className={`w-full py-2 rounded text-white font-medium ${
+            loading
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-blue-500 hover:bg-blue-600"
+          }`}
+        >
+          {loading ? "Creating Entry..." : "Create Finance Entry"}
+        </button>
       </Form>
     </div>
   );

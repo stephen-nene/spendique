@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Form, Input, Typography, Alert } from "antd";
+import { Button, Form, Input,  Alert } from "antd";
 import { useParams, useNavigate } from "react-router-dom";
 import { resetPassword } from "../../../helpers/auth.js"
 import { useSelector } from "react-redux";
@@ -43,24 +43,21 @@ export default function Reset() {
     }
   };
 
-  const formStyles = darkMode
-    ? "bg-gray-800 border-gray-700 text-white"
-    : "bg-white border-gray-300 text-gray-800";
-
-  const textColor = darkMode ? "text-white" : "text-gray-800";
+  const formStyles = 
+     "dark:bg-gray-800 dark:border-gray-700 dark:text-white    bg-white border-gray-300 text-gray-800";
 
   return (
     <div
-      className={`min-h-screen flex items-center justify-center transition-colors duration-300 ${
-        darkMode ? "bg-gray-900" : "bg-gray-100"
-      }`}
+      className={`min-h-screen flex items-center justify-center transition-colors duration-300 
+        
+      `}
     >
       <div
         className={`w-full max-w-md p-8 space-y-6 rounded-xl border shadow-lg ${formStyles}`}
       >
-        <Typography.Title level={2} className={`text-center mb-6 ${textColor}`}>
+        <h1 className={`text-center text-2xl font-bold `}>
           Reset Password
-        </Typography.Title>
+        </h1>
 
         {/* Alert Messages */}
         {serverMessage && (

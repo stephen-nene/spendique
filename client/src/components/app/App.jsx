@@ -1,6 +1,6 @@
 // App.js
 import React, { Suspense, useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route,useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Navbar } from "../Navbar";
 import Footer from "../Footer";
@@ -13,12 +13,19 @@ function App() {
   const darkMode = useSelector((state) => state.app.darkMode);
   const userData = useSelector((state) => state.user.userData);
   const dispatch = useDispatch();
+    const { pathname } = useLocation();
+
 
   useEffect(() => {
     if (!userData) {
       getCurrentUser(dispatch);
     }
   }, [dispatch, userData]);
+
+  useEffect(() => {
+    window.scrollTo(0, 4);
+  }, [pathname]);
+  
 
   const renderRoute = (route) => {
     const RouteComponent = route.element;

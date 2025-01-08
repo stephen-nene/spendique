@@ -15,7 +15,7 @@ export default function FinanceCards({ financeData, dateToView, onDelete }) {
     return new Intl.DateTimeFormat("en-US", {
       weekday: "long",
       day: "numeric",
-      month:"short",
+      month: "short",
       hour: "2-digit",
       minute: "2-digit",
       second: "2-digit",
@@ -127,13 +127,15 @@ export default function FinanceCards({ financeData, dateToView, onDelete }) {
                   <div onClick={() => handleItemDelete(finance)}>
                     <h4 className="font-semibold">{finance.title}</h4>
                     <p>{finance.description}</p>
-                    <p>
-                      <strong>Amount:</strong> Ksh {finance.amount}
-                    </p>
-                    <p>
-                      <strong>Transaction Cost:</strong> Ksh{' '}
-                      {finance.transaction_cost}
-                    </p>
+                    <div className="flex flex-wrap justify-between">
+                      <p>
+                        <strong>Amount:</strong> Ksh {finance.amount}
+                      </p>
+                      <p>
+                        <strong>Gas Fees:</strong> Ksh{" "}
+                        {finance.transaction_cost}
+                      </p>
+                    </div>
                     {finance.recurring && (
                       <p>
                         <strong>Recurring:</strong>{" "}
@@ -141,19 +143,7 @@ export default function FinanceCards({ financeData, dateToView, onDelete }) {
                         {finance.recurring.end_date}
                       </p>
                     )}
-                    <p>
-                      <strong>Created At:</strong>{" "}
-                      {formatDateTime(finance.date_created)}
-                    </p>
                   </div>
-                  {/* <div className="hidden group-hover:block text-right mt-2">
-                    <button
-                      className="text-red-600 hover:text-red-800 font-semibold"
-                      onClick={() => handleItemDelete(finance)}
-                    >
-                      Delete
-                    </button>
-                  </div> */}
                 </div>
               ))
             ) : (
@@ -182,8 +172,10 @@ export default function FinanceCards({ financeData, dateToView, onDelete }) {
           </p>
         </div>
       ) : (
-        <>
-          {renderFinanceSection("income", incomes, totalIncome)}
+          <>
+            {
+           renderFinanceSection("income", incomes, totalIncome)
+            }
           {renderFinanceSection("expense", expenses, totalExpenses)}
 
           <div className="flex items-center justify-between p-6">

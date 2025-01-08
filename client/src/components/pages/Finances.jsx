@@ -59,7 +59,7 @@ export default function Finances() {
       <Link to="/finances/new">
         <FloatButton
           icon={<PlusOutlined />}
-          tooltip="Create New Category"
+          tooltip="Create New Record"
           // onClick={() => message.success("Creating new category...")}
         />
       </Link>

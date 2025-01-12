@@ -138,12 +138,13 @@ const NewFinance = () => {
         <div className="grid grid-cols-2 gap-4">
           <Form.Item
             name="amount"
-            label="Amount in Ksh"
+            label="Amount "
             rules={[{ required: true, message: "Please enter the amount" }]}
           >
             <InputNumber
               prefix={<DollarOutlined className="text-gray-400 mr-2" />}
               size="large"
+              placeholder="Ksh"
               className="w-full"
               formatter={(value) =>
                 `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -154,7 +155,7 @@ const NewFinance = () => {
 
           <Form.Item
             name="transaction_cost"
-            label="Transaction Cost in Ksh"
+            label="Gas Fee "
             rules={[
               { required: true, message: "Please enter the transaction cost" },
             ]}
@@ -162,6 +163,7 @@ const NewFinance = () => {
             <InputNumber
               prefix={<DollarOutlined className="text-gray-400 mr-3" />}
               size="large"
+              placeholder="Ksh"
               className="w-full"
               formatter={(value) =>
                 `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")

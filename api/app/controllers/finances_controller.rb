@@ -11,6 +11,18 @@ class FinancesController < ApplicationController
         render json: { error: "Unauthorized: User not found" }, status: :unauthorized and return
       end
 
+      # Filter by month if the `month` parameter is provided
+      if params[:month].present?
+        begin
+          # Parse the provided month (expected format: YYYY-MM)
+          selected_month = Date.strptime(params[:month], "%Y-%m")
+          start_date = selected_month.beginning_of_month
+          end_date = selected_month.end_of_month
+        rescue ArgumentError
+          render json: { error: "Invalid month format. Use YYYY-MM." }, status: :unprocessable_entity and return
+        end
+      end
+
       if params[:only_my_records] == "true"
         # Fetch records only associated with the logged-in user
         @finances = user.finances.order(created_at: :desc).page(params[:page])
@@ -21,6 +33,12 @@ class FinancesController < ApplicationController
         # Fetch records only associated with the user
         @finances = user.finances.order(created_at: :desc).page(params[:page])
       end
+
+      if params[:month].present?
+        @finances = @finances.where(created_at: start_date..end_date)
+      end
+      # Paginate and order the results
+      @finances = @finances.order(created_at: :desc).page(params[:page])
 
       render json: {
         finances: serialize_collection(@finances, FinanceSerializer),

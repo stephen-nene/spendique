@@ -22,6 +22,7 @@ const AuthRoutes = {
 import { Home } from "../pages/Home";
 import { Profiles } from "../pages/Profiles";
 import Finances from "../pages/Finances";
+const Report = lazy(() => import("../pages/Report.jsx"));
 import Contact from "../pages/Contact";
 import Error404 from "../pages/utils/Error404";
 
@@ -46,6 +47,12 @@ export const routeConfig = [
   {
     path: "/finances",
     element: Finances,
+    protected: true,
+    roles: ["admin", "user"],
+  },
+  {
+    path: "/report",
+    element: Report,
     protected: true,
     roles: ["admin", "user"],
   },
